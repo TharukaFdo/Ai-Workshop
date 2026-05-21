@@ -1,4 +1,4 @@
-# Participant 3: Clinic Appointment System Prompts
+﻿# Participant 3: Clinic Appointment System Prompts
 
 ## Instructions
 
@@ -458,7 +458,7 @@ Instructions:
 - Explain the main workflow end to end.
 - Explain the data model.
 - Explain how Receptionist and Doctor are handled.
-- Explain how add or edit visit notes is protected.
+- Explain how this protected action is handled: add or edit visit notes.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -525,3 +525,4 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
+

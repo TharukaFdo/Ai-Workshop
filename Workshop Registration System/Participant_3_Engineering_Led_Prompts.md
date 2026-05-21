@@ -1,47 +1,4 @@
-﻿# Participant 3 Prompt Pack Template: Engineering-Led Master
-
-## Purpose
-
-Use this as the master prompt-pack template.
-
-Participant 3 is the strongest version of the workshop process. These prompts are designed to produce the best possible workshop project from the selected case: clear requirements, controlled scope, maintainable PERN structure, Supabase PostgreSQL data handling, backend access control, testing, security review, refactoring, change handling, and final explanation.
-
-Participant 2 should later be derived by reducing these prompts.
-
-Participant 1 should later be derived by removing software engineering concepts and reducing the prompts to casual AI-dependent requests.
-
-## Template Preparation Notes
-
-Before giving this prompt pack to a participant, replace these placeholders:
-
-```text
-[CASE_TITLE]
-[CLIENT_CASE_PARAGRAPH]
-[ROLE_1]
-[ROLE_2]
-[ROLE_1_ALLOWED_ACTIONS]
-[ROLE_2_ALLOWED_ACTIONS]
-[MAIN_ENTITY]
-[IMPORTANT_FIELDS]
-[STATUS_VALUES]
-[MAIN_FEATURE]
-[SECONDARY_FEATURE]
-[PROTECTED_ACTION]
-[VALIDATION_EXPECTATIONS]
-[SECURITY_CONCERNS]
-[OUT_OF_SCOPE]
-[CHANGE_REQUEST]
-```
-
-Rules for preparing this pack:
-
-- Keep the selected case small enough for the workshop.
-- Keep the stack fixed as React, Node.js/Express, and Supabase PostgreSQL.
-- Keep Express as the API layer between React and Supabase.
-- Do not allow a Supabase-only React application.
-- Keep the prompts detailed, but make them directly usable in the AI coding extension.
-- Keep Stage 12 as the shared final review prompt for fair comparison.
-- Adjust grammar and plural forms when replacing placeholders.
+﻿# Participant 3: Workshop Registration System Prompts
 
 ## Instructions
 
@@ -86,10 +43,10 @@ After changing files, list the files changed and how to run or check the result.
 You are helping build a workshop-limited PERN application.
 
 Selected case:
-[CASE_TITLE]
+Workshop Registration System
 
 Client explanation:
-[CLIENT_CASE_PARAGRAPH]
+We run training workshops and need a simple web application to manage participant registrations and attendance. A participant should be able to register for a workshop by providing their name, email, workshop title, and registration details, then view whether their registration is pending, confirmed, or cancelled. An organizer should be able to view registrations, update registration status, add organizer notes, and mark attendance as present or absent. It would also help if registrations could be filtered by workshop title, registration status, or attendance status. Participants should not be able to mark their own attendance or change organizer notes. This should be a small PERN prototype using React, Node.js/Express, and Supabase PostgreSQL, without payments, certificates, or email reminders.
 
 Required stack:
 - Frontend: React
@@ -97,11 +54,11 @@ Required stack:
 - Database: Supabase PostgreSQL
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Participant
+- Organizer
 
 Main entity:
-[MAIN_ENTITY]
+Registration
 
 Task:
 Create or update PROJECT_CONTEXT.md in the project codebase.
@@ -110,7 +67,7 @@ Instructions:
 - Restate the selected case in your own words.
 - Define the exact workshop scope.
 - Identify the two roles and their responsibilities.
-- Identify [MAIN_ENTITY] and the main workflow.
+- Identify Registration and the main workflow.
 - Identify the secondary feature.
 - Identify what is out of scope.
 - Identify assumptions and missing details.
@@ -130,21 +87,22 @@ Output:
 ```text
 Use the selected case and PROJECT_CONTEXT.md.
 
-Create or update REQUIREMENTS.md for [CASE_TITLE].
+Create or update REQUIREMENTS.md for Workshop Registration System.
 
 Case details:
-- Roles: [ROLE_1], [ROLE_2]
-- [ROLE_1] actions: [ROLE_1_ALLOWED_ACTIONS]
-- [ROLE_2] actions: [ROLE_2_ALLOWED_ACTIONS]
-- Main entity: [MAIN_ENTITY]
-- Important fields: [IMPORTANT_FIELDS]
-- Initial status values before Stage 11: [STATUS_VALUES]
-- Main feature: [MAIN_FEATURE]
-- Secondary feature: [SECONDARY_FEATURE]
-- Protected action: [PROTECTED_ACTION]
-- Validation expectations: [VALIDATION_EXPECTATIONS]
-- Security concerns: [SECURITY_CONCERNS]
-- Out of scope: [OUT_OF_SCOPE]
+- Roles: Participant, Organizer
+- Participant actions: create registrations, view own registration status, update own pending registration details, filter own registrations
+- Organizer actions: view registrations, update registration status, add organizer notes, mark attendance, filter registrations
+- Main entity: Registration
+- Important fields: participantName, email, workshopTitle, registrationDetails, status, attendanceStatus, organizerNote, createdAt, updatedAt
+- Initial registration status values before Stage 11: pending, confirmed, cancelled
+- Attendance status values: notMarked, present, absent
+- Main feature: workshop registration, status update and attendance marking workflow
+- Secondary feature: filter registrations by workshop title, registration status or attendance status
+- Protected action: mark attendance and edit organizer notes
+- Validation expectations: participant name, email, workshop title and registration details are required; email should use a simple valid format; registration status must use valid values; attendance status must be notMarked, present or absent
+- Security concerns: participants must not mark their own attendance; participants must not change organizer notes; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
+- Out of scope: payments, certificates, email reminders, advanced attendance analytics, multi-session scheduling
 
 Instructions:
 - Write must-have requirements only.
@@ -169,7 +127,7 @@ Output:
 ### Stage 2: PERN Architecture Backbone And Project Scaffold
 
 ```text
-Inspect the current codebase, then create or update the PERN project backbone for [CASE_TITLE].
+Inspect the current codebase, then create or update the PERN project backbone for Workshop Registration System.
 
 Required architecture:
 - React frontend
@@ -210,26 +168,29 @@ Output:
 ### Stage 3: Supabase Data Model And Database Access
 
 ```text
-Implement the database model and data access layer for [CASE_TITLE].
+Implement the database model and data access layer for Workshop Registration System.
 
 Main entity:
-[MAIN_ENTITY]
+Registration
 
 Important fields:
-[IMPORTANT_FIELDS]
+participantName, email, workshopTitle, registrationDetails, status, attendanceStatus, organizerNote, createdAt, updatedAt
 
-Initial status values before Stage 11:
-[STATUS_VALUES]
+Initial registration status values before Stage 11:
+pending, confirmed, cancelled
+
+Attendance status values:
+notMarked, present, absent
 
 Roles:
-[ROLE_1], [ROLE_2]
+Participant, Organizer
 
 Instructions:
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
 - Add backend Supabase client configuration using environment variables.
-- Add data access functions or service functions for [MAIN_ENTITY].
-- Keep the data model minimal but complete for [MAIN_FEATURE] and [SECONDARY_FEATURE].
+- Add data access functions or service functions for Registration.
+- Keep the data model minimal but complete for workshop registration, status update and attendance marking workflow and filter registrations by workshop title, registration status or attendance status.
 - Do not add unrelated entities.
 - Add example seed data if useful.
 - Update README.md or docs with database setup steps.
@@ -247,21 +208,21 @@ Output:
 ### Stage 4: UI Workflow And Frontend Skeleton
 
 ```text
-Implement the frontend workflow skeleton for [CASE_TITLE].
+Implement the frontend workflow skeleton for Workshop Registration System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Participant
+- Organizer
 
 Main workflow:
-[MAIN_FEATURE]
+workshop registration, status update and attendance marking workflow
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter registrations by workshop title, registration status or attendance status
 
 Instructions:
-- Create role-aware screens for [ROLE_1] and [ROLE_2].
-- Create forms for the important [MAIN_ENTITY] fields.
+- Create role-aware screens for Participant and Organizer.
+- Create forms for the important Registration fields.
 - Create list/detail views needed for the workflow.
 - Add simple navigation.
 - Add loading, empty, success, and error states.
@@ -281,13 +242,13 @@ Output:
 ### Stage 5: Core Feature Implementation End-To-End
 
 ```text
-Implement the core feature end-to-end for [CASE_TITLE].
+Implement the core feature end-to-end for Workshop Registration System.
 
 Core feature:
-[MAIN_FEATURE]
+workshop registration, status update and attendance marking workflow
 
 Main entity:
-[MAIN_ENTITY]
+Registration
 
 Required stack:
 - React frontend
@@ -295,7 +256,7 @@ Required stack:
 - Supabase PostgreSQL
 
 Instructions:
-- Implement the case workflow actions for [MAIN_ENTITY], including create, read, update, and status/lifecycle actions where appropriate.
+- Implement the case workflow actions for Registration, including create, read, update, and status/lifecycle actions where appropriate.
 - Add Express routes for the core workflow.
 - Connect routes to Supabase through backend service functions.
 - Connect React screens to Express API routes.
@@ -317,14 +278,14 @@ Output:
 ### Stage 6: Authentication And Backend Authorization
 
 ```text
-Add workshop-suitable authentication and backend authorization for [CASE_TITLE].
+Add workshop-suitable authentication and backend authorization for Workshop Registration System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Participant
+- Organizer
 
 Protected action:
-[PROTECTED_ACTION]
+mark attendance and edit organizer notes
 
 Instructions:
 - Add a simple login or role-selection approach suitable for the workshop.
@@ -332,7 +293,7 @@ Instructions:
 - Send role/user information to the backend in a simple workshop-safe way.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
-- Ensure [PROTECTED_ACTION] is blocked for the wrong role.
+- Ensure mark attendance and edit organizer notes is blocked for the wrong role.
 - Ensure users cannot modify data they should not modify.
 - Clearly mark what is simplified for the workshop.
 - After editing, list all files created or changed.
@@ -350,19 +311,19 @@ Output:
 ### Stage 7: Secondary Feature Implementation
 
 ```text
-Implement the secondary feature for [CASE_TITLE].
+Implement the secondary feature for Workshop Registration System.
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter registrations by workshop title, registration status or attendance status
 
 Main entity:
-[MAIN_ENTITY]
+Registration
 
 Instructions:
-- Keep the feature small and directly connected to [MAIN_ENTITY].
+- Keep the feature small and directly connected to Registration.
 - Add only the backend route/query changes needed.
 - Add only the frontend UI changes needed.
-- Ensure the feature respects [ROLE_1] and [ROLE_2] permissions.
+- Ensure the feature respects Participant and Organizer permissions.
 - Ensure backend validation still applies.
 - Do not add unrelated features.
 - After editing, list all files created or changed.
@@ -379,7 +340,7 @@ Output:
 ### Stage 8: Tests And Manual Verification
 
 ```text
-Add practical verification for [CASE_TITLE].
+Add practical verification for Workshop Registration System.
 
 Instructions:
 - Add lightweight automated tests if the project setup supports it.
@@ -388,10 +349,10 @@ Instructions:
 - Cover create, view, update, and status/lifecycle actions where implemented.
 - Cover required field validation.
 - Cover invalid status or invalid input cases.
-- Cover [ROLE_1] allowed and blocked actions.
-- Cover [ROLE_2] allowed and blocked actions.
-- Cover [PROTECTED_ACTION].
-- Cover [SECONDARY_FEATURE].
+- Cover Participant allowed and blocked actions.
+- Cover Organizer allowed and blocked actions.
+- Cover mark attendance and edit organizer notes.
+- Cover filter registrations by workshop title, registration status or attendance status.
 - Include expected results and actual result placeholders.
 - After editing, list all files created or changed.
 
@@ -407,19 +368,19 @@ Output:
 ### Stage 9: Security And Validation Hardening
 
 ```text
-Review and improve security and validation for [CASE_TITLE].
+Review and improve security and validation for Workshop Registration System.
 
 Known security concerns:
-[SECURITY_CONCERNS]
+participants must not mark their own attendance; participants must not change organizer notes; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
 
 Validation expectations:
-[VALIDATION_EXPECTATIONS]
+participant name, email, workshop title and registration details are required; email should use a simple valid format; registration status must use valid values; attendance status must be notMarked, present or absent
 
 Instructions:
 - Inspect backend routes and services.
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
-- Ensure [PROTECTED_ACTION] is protected.
+- Ensure mark attendance and edit organizer notes is protected.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
@@ -438,7 +399,7 @@ Output:
 ### Stage 10: Maintainability Refactor And Documentation
 
 ```text
-Refactor [CASE_TITLE] for maintainability without changing behaviour.
+Refactor Workshop Registration System for maintainability without changing behaviour.
 
 Instructions:
 - Identify duplicated code.
@@ -465,8 +426,8 @@ Output:
 Use this only when the facilitator reaches Stage 11.
 
 ```text
-Apply this change request to [CASE_TITLE]:
-[CHANGE_REQUEST]
+Apply this change request to Workshop Registration System:
+organizers can move pending registrations to a waitlisted status, and waitlisted registrations can later be confirmed.
 
 Instructions:
 - Do not start coding immediately.
@@ -493,15 +454,15 @@ Output:
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for [CASE_TITLE].
+Prepare a final review for Workshop Registration System.
 
 Instructions:
 - Inspect the completed project.
 - Summarize what was built.
 - Explain the main workflow end to end.
 - Explain the data model.
-- Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how this protected action is handled: [PROTECTED_ACTION].
+- Explain how Participant and Organizer are handled.
+- Explain how this protected action is handled: mark attendance and edit organizer notes.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -527,7 +488,7 @@ Output:
 Use this at any stage when the AI response is incomplete, incorrect, too broad, unsafe, not testable, or not aligned with the selected case.
 
 ```text
-Revise the previous response for [CASE_TITLE].
+Revise the previous response for Workshop Registration System.
 
 Keep these constraints:
 - React frontend, Express backend, Supabase PostgreSQL database.
@@ -535,7 +496,7 @@ Keep these constraints:
 - Express must handle Supabase access.
 - Do not build a Supabase-only React app.
 - Keep the scope limited to the selected case.
-- Include [ROLE_1], [ROLE_2], [MAIN_ENTITY], [MAIN_FEATURE], [SECONDARY_FEATURE], and [PROTECTED_ACTION].
+- Include Participant, Organizer, Registration, workshop registration, status update and attendance marking workflow, filter registrations by workshop title, registration status or attendance status, and mark attendance and edit organizer notes.
 - Enforce role access in the backend, not only the UI.
 - Include backend validation for required fields and status values.
 - Avoid pseudocode.
@@ -543,7 +504,7 @@ Keep these constraints:
 - Include how to verify the result.
 
 Issue to fix:
-The previous response is incomplete, incorrect, or not aligned with [CASE_TITLE].
+The previous response is incomplete, incorrect, or not aligned with Workshop Registration System.
 ```
 
 ## Error Prompt
@@ -554,7 +515,7 @@ Use this when the app fails.
 The app failed with this error:
 
 Context:
-This is [CASE_TITLE], a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
+This is Workshop Registration System, a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
 
 Rules:
 - Do not change the stack.
@@ -568,4 +529,6 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
+
+
 

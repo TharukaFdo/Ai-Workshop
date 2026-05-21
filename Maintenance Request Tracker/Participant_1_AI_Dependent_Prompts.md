@@ -1,39 +1,4 @@
-﻿# Participant 1 Prompt Pack Template: AI-Dependent
-
-## Purpose
-
-Use this template to create the case-specific prompt pack for Participant 1.
-
-Participant 1 is derived from the Participant 2 prompt pack by removing software engineering concepts and reducing the wording to short casual requests. This participant depends heavily on AI and lets AI decide many details.
-
-The goal is to see what happens when the participant uses AI to build the same selected case with minimal planning, minimal technical language, and little control over the result.
-
-## Template Preparation Notes
-
-Before giving this prompt pack to a participant, replace these placeholders:
-
-```text
-[CASE_SHORT_NAME]
-[CASE_TITLE]
-[ROLE_1]
-[ROLE_2]
-[MAIN_ENTITY]
-[MAIN_FEATURE]
-[SECONDARY_FEATURE]
-[PROTECTED_ACTION]
-[CHANGE_REQUEST]
-```
-
-Rules for preparing this pack:
-
-- Keep Stages 0 to 11 short and casual.
-- Keep Stage 12 as the shared final review prompt for fair comparison.
-- Use the shortest useful case name for `[CASE_SHORT_NAME]`.
-- Do not add software engineering terms to Stages 0 to 11.
-- Do not add detailed project instructions.
-- Do not include the full client case paragraph inside the prompts.
-- Do not ask for planning documents or instruction `.md` files.
-- Adjust grammar and plural forms when replacing placeholders.
+﻿# Participant 1: Maintenance Request Tracker Prompts
 
 ## Instructions
 
@@ -52,7 +17,7 @@ Do not create instruction `.md` files in the project codebase.
 ### Stage 0: Start The App
 
 ```text
-I want to build a [CASE_SHORT_NAME] app. Where should I start?
+I want to build a maintenance request tracker app. Where should I start?
 ```
 
 ### Stage 1: Understand The App
@@ -70,31 +35,31 @@ Set up the project files so I can run the app.
 ### Stage 3: Save The Main Thing
 
 ```text
-Make [MAIN_ENTITY] save in Supabase and show again.
+Make maintenance requests save in Supabase and show again.
 ```
 
 ### Stage 4: Make The Screens
 
 ```text
-Make simple screens for [ROLE_1] and [ROLE_2].
+Make simple screens for requester and technician.
 ```
 
 ### Stage 5: Add The Main Work
 
 ```text
-Add [MAIN_FEATURE].
+Add creating, viewing, updating progress and closing maintenance requests.
 ```
 
 ### Stage 6: Add Login
 
 ```text
-Add login for [ROLE_1] and [ROLE_2].
+Add login for requester and technician.
 ```
 
 ### Stage 7: Add The Extra Part
 
 ```text
-Add [SECONDARY_FEATURE].
+Add filtering by location, priority or status.
 ```
 
 ### Stage 8: Check The App
@@ -120,21 +85,21 @@ Clean up the code and keep the app working.
 Use this only when the facilitator reaches Stage 11.
 
 ```text
-Change the app: [CHANGE_REQUEST]
+Change the app: high priority requests need an urgent flag and cannot be closed without a technician note.
 ```
 
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for [CASE_TITLE].
+Prepare a final review for Maintenance Request Tracker.
 
 Instructions:
 - Inspect the completed project.
 - Summarize what was built.
 - Explain the main workflow end to end.
 - Explain the data model.
-- Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how this protected action is handled: [PROTECTED_ACTION].
+- Explain how requester and technician are handled.
+- Explain how this protected action is handled: add or edit technician notes and close requests.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -160,7 +125,7 @@ Output:
 Use this at any stage when the AI output is wrong, too big, incomplete, broken, or not matching the selected case.
 
 ```text
-This is wrong. Make it match the [CASE_SHORT_NAME] app, keep it simple, and fix it.
+This is wrong. Make it match the maintenance request tracker app, keep it simple, and fix it.
 ```
 
 ## Error Prompt
@@ -170,4 +135,6 @@ Use this when the app fails.
 ```text
 Fix this error:
 ```
+
+
 

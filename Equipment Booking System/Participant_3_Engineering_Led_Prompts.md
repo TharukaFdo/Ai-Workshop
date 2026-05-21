@@ -1,47 +1,4 @@
-﻿# Participant 3 Prompt Pack Template: Engineering-Led Master
-
-## Purpose
-
-Use this as the master prompt-pack template.
-
-Participant 3 is the strongest version of the workshop process. These prompts are designed to produce the best possible workshop project from the selected case: clear requirements, controlled scope, maintainable PERN structure, Supabase PostgreSQL data handling, backend access control, testing, security review, refactoring, change handling, and final explanation.
-
-Participant 2 should later be derived by reducing these prompts.
-
-Participant 1 should later be derived by removing software engineering concepts and reducing the prompts to casual AI-dependent requests.
-
-## Template Preparation Notes
-
-Before giving this prompt pack to a participant, replace these placeholders:
-
-```text
-[CASE_TITLE]
-[CLIENT_CASE_PARAGRAPH]
-[ROLE_1]
-[ROLE_2]
-[ROLE_1_ALLOWED_ACTIONS]
-[ROLE_2_ALLOWED_ACTIONS]
-[MAIN_ENTITY]
-[IMPORTANT_FIELDS]
-[STATUS_VALUES]
-[MAIN_FEATURE]
-[SECONDARY_FEATURE]
-[PROTECTED_ACTION]
-[VALIDATION_EXPECTATIONS]
-[SECURITY_CONCERNS]
-[OUT_OF_SCOPE]
-[CHANGE_REQUEST]
-```
-
-Rules for preparing this pack:
-
-- Keep the selected case small enough for the workshop.
-- Keep the stack fixed as React, Node.js/Express, and Supabase PostgreSQL.
-- Keep Express as the API layer between React and Supabase.
-- Do not allow a Supabase-only React application.
-- Keep the prompts detailed, but make them directly usable in the AI coding extension.
-- Keep Stage 12 as the shared final review prompt for fair comparison.
-- Adjust grammar and plural forms when replacing placeholders.
+﻿# Participant 3: Equipment Booking System Prompts
 
 ## Instructions
 
@@ -86,10 +43,10 @@ After changing files, list the files changed and how to run or check the result.
 You are helping build a workshop-limited PERN application.
 
 Selected case:
-[CASE_TITLE]
+Equipment Booking System
 
 Client explanation:
-[CLIENT_CASE_PARAGRAPH]
+We manage shared lab equipment and need a simple way for staff to request equipment bookings instead of handling everything through messages. A staff member should be able to request equipment for a specific date and time, explain the purpose, and view the status of their own bookings. A lab assistant should be able to view all booking requests and approve or reject them with a short comment. The system should store equipment name, requested user, booking date, start time, end time, purpose, status, and assistant comment. It would also help if bookings could be filtered by equipment, date, or status. Staff should not be able to approve their own bookings or manage other users' requests. This should be a workshop-sized PERN application using React, Node.js/Express, and Supabase PostgreSQL.
 
 Required stack:
 - Frontend: React
@@ -97,11 +54,11 @@ Required stack:
 - Database: Supabase PostgreSQL
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Staff member
+- Lab assistant
 
 Main entity:
-[MAIN_ENTITY]
+Booking
 
 Task:
 Create or update PROJECT_CONTEXT.md in the project codebase.
@@ -110,7 +67,7 @@ Instructions:
 - Restate the selected case in your own words.
 - Define the exact workshop scope.
 - Identify the two roles and their responsibilities.
-- Identify [MAIN_ENTITY] and the main workflow.
+- Identify Booking and the main workflow.
 - Identify the secondary feature.
 - Identify what is out of scope.
 - Identify assumptions and missing details.
@@ -130,21 +87,21 @@ Output:
 ```text
 Use the selected case and PROJECT_CONTEXT.md.
 
-Create or update REQUIREMENTS.md for [CASE_TITLE].
+Create or update REQUIREMENTS.md for Equipment Booking System.
 
 Case details:
-- Roles: [ROLE_1], [ROLE_2]
-- [ROLE_1] actions: [ROLE_1_ALLOWED_ACTIONS]
-- [ROLE_2] actions: [ROLE_2_ALLOWED_ACTIONS]
-- Main entity: [MAIN_ENTITY]
-- Important fields: [IMPORTANT_FIELDS]
-- Initial status values before Stage 11: [STATUS_VALUES]
-- Main feature: [MAIN_FEATURE]
-- Secondary feature: [SECONDARY_FEATURE]
-- Protected action: [PROTECTED_ACTION]
-- Validation expectations: [VALIDATION_EXPECTATIONS]
-- Security concerns: [SECURITY_CONCERNS]
-- Out of scope: [OUT_OF_SCOPE]
+- Roles: Staff member, Lab assistant
+- Staff member actions: request equipment bookings, view own bookings, update own pending booking details, filter own bookings, view booking status
+- Lab assistant actions: view all booking requests, approve or reject bookings, add assistant comments, filter bookings
+- Main entity: Booking
+- Important fields: equipmentName, requestedUser, bookingDate, startTime, endTime, purpose, status, assistantComment, createdAt, updatedAt
+- Initial status values before Stage 11: pending, approved, rejected
+- Main feature: equipment booking request create, view, update and approve/reject workflow
+- Secondary feature: filter bookings by equipment, date or status
+- Protected action: approve or reject bookings and add assistant comments
+- Validation expectations: equipment name, requested user, booking date, start time, end time and purpose are required; status must use valid values; booking date/time must be valid; end time must be after start time
+- Security concerns: staff must not approve or reject bookings; staff must not manage other users' requests; staff must not edit assistant comments; Supabase service keys must not be exposed in frontend code
+- Out of scope: full inventory management, equipment maintenance tracking, payments, notifications, file uploads
 
 Instructions:
 - Write must-have requirements only.
@@ -169,7 +126,7 @@ Output:
 ### Stage 2: PERN Architecture Backbone And Project Scaffold
 
 ```text
-Inspect the current codebase, then create or update the PERN project backbone for [CASE_TITLE].
+Inspect the current codebase, then create or update the PERN project backbone for Equipment Booking System.
 
 Required architecture:
 - React frontend
@@ -210,26 +167,26 @@ Output:
 ### Stage 3: Supabase Data Model And Database Access
 
 ```text
-Implement the database model and data access layer for [CASE_TITLE].
+Implement the database model and data access layer for Equipment Booking System.
 
 Main entity:
-[MAIN_ENTITY]
+Booking
 
 Important fields:
-[IMPORTANT_FIELDS]
+equipmentName, requestedUser, bookingDate, startTime, endTime, purpose, status, assistantComment, createdAt, updatedAt
 
 Initial status values before Stage 11:
-[STATUS_VALUES]
+pending, approved, rejected
 
 Roles:
-[ROLE_1], [ROLE_2]
+Staff member, Lab assistant
 
 Instructions:
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
 - Add backend Supabase client configuration using environment variables.
-- Add data access functions or service functions for [MAIN_ENTITY].
-- Keep the data model minimal but complete for [MAIN_FEATURE] and [SECONDARY_FEATURE].
+- Add data access functions or service functions for Booking.
+- Keep the data model minimal but complete for equipment booking request create, view, update and approve/reject workflow and filter bookings by equipment, date or status.
 - Do not add unrelated entities.
 - Add example seed data if useful.
 - Update README.md or docs with database setup steps.
@@ -247,21 +204,21 @@ Output:
 ### Stage 4: UI Workflow And Frontend Skeleton
 
 ```text
-Implement the frontend workflow skeleton for [CASE_TITLE].
+Implement the frontend workflow skeleton for Equipment Booking System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Staff member
+- Lab assistant
 
 Main workflow:
-[MAIN_FEATURE]
+equipment booking request create, view, update and approve/reject workflow
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter bookings by equipment, date or status
 
 Instructions:
-- Create role-aware screens for [ROLE_1] and [ROLE_2].
-- Create forms for the important [MAIN_ENTITY] fields.
+- Create role-aware screens for Staff member and Lab assistant.
+- Create forms for the important Booking fields.
 - Create list/detail views needed for the workflow.
 - Add simple navigation.
 - Add loading, empty, success, and error states.
@@ -281,13 +238,13 @@ Output:
 ### Stage 5: Core Feature Implementation End-To-End
 
 ```text
-Implement the core feature end-to-end for [CASE_TITLE].
+Implement the core feature end-to-end for Equipment Booking System.
 
 Core feature:
-[MAIN_FEATURE]
+equipment booking request create, view, update and approve/reject workflow
 
 Main entity:
-[MAIN_ENTITY]
+Booking
 
 Required stack:
 - React frontend
@@ -295,7 +252,7 @@ Required stack:
 - Supabase PostgreSQL
 
 Instructions:
-- Implement the case workflow actions for [MAIN_ENTITY], including create, read, update, and status/lifecycle actions where appropriate.
+- Implement the case workflow actions for Booking, including create, read, update, and status/lifecycle actions where appropriate.
 - Add Express routes for the core workflow.
 - Connect routes to Supabase through backend service functions.
 - Connect React screens to Express API routes.
@@ -317,14 +274,14 @@ Output:
 ### Stage 6: Authentication And Backend Authorization
 
 ```text
-Add workshop-suitable authentication and backend authorization for [CASE_TITLE].
+Add workshop-suitable authentication and backend authorization for Equipment Booking System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Staff member
+- Lab assistant
 
 Protected action:
-[PROTECTED_ACTION]
+approve or reject bookings and add assistant comments
 
 Instructions:
 - Add a simple login or role-selection approach suitable for the workshop.
@@ -332,7 +289,7 @@ Instructions:
 - Send role/user information to the backend in a simple workshop-safe way.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
-- Ensure [PROTECTED_ACTION] is blocked for the wrong role.
+- Ensure approve or reject bookings and add assistant comments is blocked for the wrong role.
 - Ensure users cannot modify data they should not modify.
 - Clearly mark what is simplified for the workshop.
 - After editing, list all files created or changed.
@@ -350,19 +307,19 @@ Output:
 ### Stage 7: Secondary Feature Implementation
 
 ```text
-Implement the secondary feature for [CASE_TITLE].
+Implement the secondary feature for Equipment Booking System.
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter bookings by equipment, date or status
 
 Main entity:
-[MAIN_ENTITY]
+Booking
 
 Instructions:
-- Keep the feature small and directly connected to [MAIN_ENTITY].
+- Keep the feature small and directly connected to Booking.
 - Add only the backend route/query changes needed.
 - Add only the frontend UI changes needed.
-- Ensure the feature respects [ROLE_1] and [ROLE_2] permissions.
+- Ensure the feature respects Staff member and Lab assistant permissions.
 - Ensure backend validation still applies.
 - Do not add unrelated features.
 - After editing, list all files created or changed.
@@ -379,7 +336,7 @@ Output:
 ### Stage 8: Tests And Manual Verification
 
 ```text
-Add practical verification for [CASE_TITLE].
+Add practical verification for Equipment Booking System.
 
 Instructions:
 - Add lightweight automated tests if the project setup supports it.
@@ -388,10 +345,10 @@ Instructions:
 - Cover create, view, update, and status/lifecycle actions where implemented.
 - Cover required field validation.
 - Cover invalid status or invalid input cases.
-- Cover [ROLE_1] allowed and blocked actions.
-- Cover [ROLE_2] allowed and blocked actions.
-- Cover [PROTECTED_ACTION].
-- Cover [SECONDARY_FEATURE].
+- Cover Staff member allowed and blocked actions.
+- Cover Lab assistant allowed and blocked actions.
+- Cover approve or reject bookings and add assistant comments.
+- Cover filter bookings by equipment, date or status.
 - Include expected results and actual result placeholders.
 - After editing, list all files created or changed.
 
@@ -407,19 +364,19 @@ Output:
 ### Stage 9: Security And Validation Hardening
 
 ```text
-Review and improve security and validation for [CASE_TITLE].
+Review and improve security and validation for Equipment Booking System.
 
 Known security concerns:
-[SECURITY_CONCERNS]
+staff must not approve or reject bookings; staff must not manage other users' requests; staff must not edit assistant comments; Supabase service keys must not be exposed in frontend code
 
 Validation expectations:
-[VALIDATION_EXPECTATIONS]
+equipment name, requested user, booking date, start time, end time and purpose are required; status must use valid values; booking date/time must be valid; end time must be after start time
 
 Instructions:
 - Inspect backend routes and services.
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
-- Ensure [PROTECTED_ACTION] is protected.
+- Ensure approve or reject bookings and add assistant comments is protected.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
@@ -438,7 +395,7 @@ Output:
 ### Stage 10: Maintainability Refactor And Documentation
 
 ```text
-Refactor [CASE_TITLE] for maintainability without changing behaviour.
+Refactor Equipment Booking System for maintainability without changing behaviour.
 
 Instructions:
 - Identify duplicated code.
@@ -465,8 +422,8 @@ Output:
 Use this only when the facilitator reaches Stage 11.
 
 ```text
-Apply this change request to [CASE_TITLE]:
-[CHANGE_REQUEST]
+Apply this change request to Equipment Booking System:
+approved bookings can be marked as collected and returned by the lab assistant, and staff can view the collection and return status.
 
 Instructions:
 - Do not start coding immediately.
@@ -493,15 +450,15 @@ Output:
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for [CASE_TITLE].
+Prepare a final review for Equipment Booking System.
 
 Instructions:
 - Inspect the completed project.
 - Summarize what was built.
 - Explain the main workflow end to end.
 - Explain the data model.
-- Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how this protected action is handled: [PROTECTED_ACTION].
+- Explain how Staff member and Lab assistant are handled.
+- Explain how this protected action is handled: approve or reject bookings and add assistant comments.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -527,7 +484,7 @@ Output:
 Use this at any stage when the AI response is incomplete, incorrect, too broad, unsafe, not testable, or not aligned with the selected case.
 
 ```text
-Revise the previous response for [CASE_TITLE].
+Revise the previous response for Equipment Booking System.
 
 Keep these constraints:
 - React frontend, Express backend, Supabase PostgreSQL database.
@@ -535,7 +492,7 @@ Keep these constraints:
 - Express must handle Supabase access.
 - Do not build a Supabase-only React app.
 - Keep the scope limited to the selected case.
-- Include [ROLE_1], [ROLE_2], [MAIN_ENTITY], [MAIN_FEATURE], [SECONDARY_FEATURE], and [PROTECTED_ACTION].
+- Include Staff member, Lab assistant, Booking, equipment booking request create, view, update and approve/reject workflow, filter bookings by equipment, date or status, and approve or reject bookings and add assistant comments.
 - Enforce role access in the backend, not only the UI.
 - Include backend validation for required fields and status values.
 - Avoid pseudocode.
@@ -543,7 +500,7 @@ Keep these constraints:
 - Include how to verify the result.
 
 Issue to fix:
-The previous response is incomplete, incorrect, or not aligned with [CASE_TITLE].
+The previous response is incomplete, incorrect, or not aligned with Equipment Booking System.
 ```
 
 ## Error Prompt
@@ -554,7 +511,7 @@ Use this when the app fails.
 The app failed with this error:
 
 Context:
-This is [CASE_TITLE], a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
+This is Equipment Booking System, a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
 
 Rules:
 - Do not change the stack.
@@ -568,4 +525,6 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
+
+
 

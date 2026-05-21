@@ -1,4 +1,4 @@
-# Participant 2 Prompt Pack Template: SE-Aware
+﻿# Participant 2 Prompt Pack Template: SE-Aware
 
 ## Purpose
 
@@ -23,8 +23,6 @@ Before giving this prompt pack to a participant, replace these placeholders:
 [SECONDARY_FEATURE]
 [PROTECTED_ACTION]
 [CHANGE_REQUEST]
-[DESCRIBE_PROBLEM]
-[PASTE_ERROR]
 ```
 
 Rules for preparing this pack:
@@ -37,9 +35,8 @@ Rules for preparing this pack:
 - Do not ask for detailed tradeoff analysis.
 - Do not ask AI to create instruction `.md` files in the codebase.
 - Adjust grammar and plural forms when replacing placeholders.
-- `[DESCRIBE_PROBLEM]` and `[PASTE_ERROR]` are filled only when something goes wrong during the workshop.
 
-## Participant Instructions
+## Instructions
 
 Copy and paste the prompts in order.
 
@@ -138,7 +135,7 @@ Instructions:
 - Explain the main workflow end to end.
 - Explain the data model.
 - Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how [PROTECTED_ACTION] is protected.
+- Explain how this protected action is handled: [PROTECTED_ACTION].
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -164,7 +161,7 @@ Output:
 Use this at any stage when the AI output is incomplete, incorrect, too broad, or not aligned with the selected case.
 
 ```text
-Revise for [CASE_TITLE]. Keep PERN, small scope, [ROLE_1], [ROLE_2], [MAIN_ENTITY], validation, role access, [PROTECTED_ACTION], [SECONDARY_FEATURE]. Fix: [DESCRIBE_PROBLEM]
+Revise for [CASE_TITLE]. Keep PERN, small scope, [ROLE_1], [ROLE_2], [MAIN_ENTITY], validation, role access, [PROTECTED_ACTION], [SECONDARY_FEATURE], and fix the issue.
 ```
 
 ## Error Prompt
@@ -172,5 +169,6 @@ Revise for [CASE_TITLE]. Keep PERN, small scope, [ROLE_1], [ROLE_2], [MAIN_ENTIT
 Use this when the app fails.
 
 ```text
-Fix this PERN app error. Keep React, Express, and Supabase. Explain the cause briefly and show the changed files: [PASTE_ERROR]
+Fix this PERN app error. Keep React, Express, and Supabase. Explain the cause briefly and show the changed files:
 ```
+

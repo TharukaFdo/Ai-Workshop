@@ -1,47 +1,4 @@
-﻿# Participant 3 Prompt Pack Template: Engineering-Led Master
-
-## Purpose
-
-Use this as the master prompt-pack template.
-
-Participant 3 is the strongest version of the workshop process. These prompts are designed to produce the best possible workshop project from the selected case: clear requirements, controlled scope, maintainable PERN structure, Supabase PostgreSQL data handling, backend access control, testing, security review, refactoring, change handling, and final explanation.
-
-Participant 2 should later be derived by reducing these prompts.
-
-Participant 1 should later be derived by removing software engineering concepts and reducing the prompts to casual AI-dependent requests.
-
-## Template Preparation Notes
-
-Before giving this prompt pack to a participant, replace these placeholders:
-
-```text
-[CASE_TITLE]
-[CLIENT_CASE_PARAGRAPH]
-[ROLE_1]
-[ROLE_2]
-[ROLE_1_ALLOWED_ACTIONS]
-[ROLE_2_ALLOWED_ACTIONS]
-[MAIN_ENTITY]
-[IMPORTANT_FIELDS]
-[STATUS_VALUES]
-[MAIN_FEATURE]
-[SECONDARY_FEATURE]
-[PROTECTED_ACTION]
-[VALIDATION_EXPECTATIONS]
-[SECURITY_CONCERNS]
-[OUT_OF_SCOPE]
-[CHANGE_REQUEST]
-```
-
-Rules for preparing this pack:
-
-- Keep the selected case small enough for the workshop.
-- Keep the stack fixed as React, Node.js/Express, and Supabase PostgreSQL.
-- Keep Express as the API layer between React and Supabase.
-- Do not allow a Supabase-only React application.
-- Keep the prompts detailed, but make them directly usable in the AI coding extension.
-- Keep Stage 12 as the shared final review prompt for fair comparison.
-- Adjust grammar and plural forms when replacing placeholders.
+﻿# Participant 3: Library Lending System Prompts
 
 ## Instructions
 
@@ -86,10 +43,10 @@ After changing files, list the files changed and how to run or check the result.
 You are helping build a workshop-limited PERN application.
 
 Selected case:
-[CASE_TITLE]
+Library Lending System
 
 Client explanation:
-[CLIENT_CASE_PARAGRAPH]
+We manage a small library and need a basic web system to track books and borrowing. A librarian should be able to add, edit, remove, and manage book records, while a member should be able to view available books and borrow or return them. The system should store book details such as title, author, ISBN, category, availability status, borrowed member, borrowed date, and return date. Members should be able to search or filter books by title, category, or availability. Members should not be able to add or delete books, and they should not be able to borrow books on behalf of other members. This should be a small React, Node.js/Express, and Supabase PostgreSQL prototype that demonstrates the lending workflow without advanced features like fines, barcode scanning, or reminders.
 
 Required stack:
 - Frontend: React
@@ -97,11 +54,11 @@ Required stack:
 - Database: Supabase PostgreSQL
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Librarian
+- Member
 
 Main entity:
-[MAIN_ENTITY]
+Book
 
 Task:
 Create or update PROJECT_CONTEXT.md in the project codebase.
@@ -110,7 +67,7 @@ Instructions:
 - Restate the selected case in your own words.
 - Define the exact workshop scope.
 - Identify the two roles and their responsibilities.
-- Identify [MAIN_ENTITY] and the main workflow.
+- Identify Book and the main workflow.
 - Identify the secondary feature.
 - Identify what is out of scope.
 - Identify assumptions and missing details.
@@ -130,21 +87,21 @@ Output:
 ```text
 Use the selected case and PROJECT_CONTEXT.md.
 
-Create or update REQUIREMENTS.md for [CASE_TITLE].
+Create or update REQUIREMENTS.md for Library Lending System.
 
 Case details:
-- Roles: [ROLE_1], [ROLE_2]
-- [ROLE_1] actions: [ROLE_1_ALLOWED_ACTIONS]
-- [ROLE_2] actions: [ROLE_2_ALLOWED_ACTIONS]
-- Main entity: [MAIN_ENTITY]
-- Important fields: [IMPORTANT_FIELDS]
-- Initial status values before Stage 11: [STATUS_VALUES]
-- Main feature: [MAIN_FEATURE]
-- Secondary feature: [SECONDARY_FEATURE]
-- Protected action: [PROTECTED_ACTION]
-- Validation expectations: [VALIDATION_EXPECTATIONS]
-- Security concerns: [SECURITY_CONCERNS]
-- Out of scope: [OUT_OF_SCOPE]
+- Roles: Librarian, Member
+- Librarian actions: add books, edit book records, remove book records, view lending status, filter books
+- Member actions: view available books, borrow books, return own borrowed books, filter books
+- Main entity: Book
+- Important fields: title, author, isbn, category, availabilityStatus, borrowedMember, borrowedDate, returnDate, createdAt, updatedAt
+- Initial status values before Stage 11: available, borrowed, unavailable
+- Main feature: book record management and borrow/return workflow
+- Secondary feature: search or filter books by title, category or availability
+- Protected action: add, edit or remove book records
+- Validation expectations: title, author, ISBN and category are required; availability status must use valid values; borrowed member and dates must match the lending state
+- Security concerns: members must not add or delete books; members must not borrow books on behalf of other members; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
+- Out of scope: fines, barcode scanning, reminder messages, full catalog import, advanced reservation rules
 
 Instructions:
 - Write must-have requirements only.
@@ -169,7 +126,7 @@ Output:
 ### Stage 2: PERN Architecture Backbone And Project Scaffold
 
 ```text
-Inspect the current codebase, then create or update the PERN project backbone for [CASE_TITLE].
+Inspect the current codebase, then create or update the PERN project backbone for Library Lending System.
 
 Required architecture:
 - React frontend
@@ -210,26 +167,26 @@ Output:
 ### Stage 3: Supabase Data Model And Database Access
 
 ```text
-Implement the database model and data access layer for [CASE_TITLE].
+Implement the database model and data access layer for Library Lending System.
 
 Main entity:
-[MAIN_ENTITY]
+Book
 
 Important fields:
-[IMPORTANT_FIELDS]
+title, author, isbn, category, availabilityStatus, borrowedMember, borrowedDate, returnDate, createdAt, updatedAt
 
 Initial status values before Stage 11:
-[STATUS_VALUES]
+available, borrowed, unavailable
 
 Roles:
-[ROLE_1], [ROLE_2]
+Librarian, Member
 
 Instructions:
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
 - Add backend Supabase client configuration using environment variables.
-- Add data access functions or service functions for [MAIN_ENTITY].
-- Keep the data model minimal but complete for [MAIN_FEATURE] and [SECONDARY_FEATURE].
+- Add data access functions or service functions for Book.
+- Keep the data model minimal but complete for book record management and borrow/return workflow and search or filter books by title, category or availability.
 - Do not add unrelated entities.
 - Add example seed data if useful.
 - Update README.md or docs with database setup steps.
@@ -247,21 +204,21 @@ Output:
 ### Stage 4: UI Workflow And Frontend Skeleton
 
 ```text
-Implement the frontend workflow skeleton for [CASE_TITLE].
+Implement the frontend workflow skeleton for Library Lending System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Librarian
+- Member
 
 Main workflow:
-[MAIN_FEATURE]
+book record management and borrow/return workflow
 
 Secondary feature:
-[SECONDARY_FEATURE]
+search or filter books by title, category or availability
 
 Instructions:
-- Create role-aware screens for [ROLE_1] and [ROLE_2].
-- Create forms for the important [MAIN_ENTITY] fields.
+- Create role-aware screens for Librarian and Member.
+- Create forms for the important Book fields.
 - Create list/detail views needed for the workflow.
 - Add simple navigation.
 - Add loading, empty, success, and error states.
@@ -281,13 +238,13 @@ Output:
 ### Stage 5: Core Feature Implementation End-To-End
 
 ```text
-Implement the core feature end-to-end for [CASE_TITLE].
+Implement the core feature end-to-end for Library Lending System.
 
 Core feature:
-[MAIN_FEATURE]
+book record management and borrow/return workflow
 
 Main entity:
-[MAIN_ENTITY]
+Book
 
 Required stack:
 - React frontend
@@ -295,7 +252,7 @@ Required stack:
 - Supabase PostgreSQL
 
 Instructions:
-- Implement the case workflow actions for [MAIN_ENTITY], including create, read, update, and status/lifecycle actions where appropriate.
+- Implement the case workflow actions for Book, including create, read, update, and status/lifecycle actions where appropriate.
 - Add Express routes for the core workflow.
 - Connect routes to Supabase through backend service functions.
 - Connect React screens to Express API routes.
@@ -317,14 +274,14 @@ Output:
 ### Stage 6: Authentication And Backend Authorization
 
 ```text
-Add workshop-suitable authentication and backend authorization for [CASE_TITLE].
+Add workshop-suitable authentication and backend authorization for Library Lending System.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Librarian
+- Member
 
 Protected action:
-[PROTECTED_ACTION]
+add, edit or remove book records
 
 Instructions:
 - Add a simple login or role-selection approach suitable for the workshop.
@@ -332,7 +289,7 @@ Instructions:
 - Send role/user information to the backend in a simple workshop-safe way.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
-- Ensure [PROTECTED_ACTION] is blocked for the wrong role.
+- Ensure add, edit or remove book records is blocked for the wrong role.
 - Ensure users cannot modify data they should not modify.
 - Clearly mark what is simplified for the workshop.
 - After editing, list all files created or changed.
@@ -350,19 +307,19 @@ Output:
 ### Stage 7: Secondary Feature Implementation
 
 ```text
-Implement the secondary feature for [CASE_TITLE].
+Implement the secondary feature for Library Lending System.
 
 Secondary feature:
-[SECONDARY_FEATURE]
+search or filter books by title, category or availability
 
 Main entity:
-[MAIN_ENTITY]
+Book
 
 Instructions:
-- Keep the feature small and directly connected to [MAIN_ENTITY].
+- Keep the feature small and directly connected to Book.
 - Add only the backend route/query changes needed.
 - Add only the frontend UI changes needed.
-- Ensure the feature respects [ROLE_1] and [ROLE_2] permissions.
+- Ensure the feature respects Librarian and Member permissions.
 - Ensure backend validation still applies.
 - Do not add unrelated features.
 - After editing, list all files created or changed.
@@ -379,7 +336,7 @@ Output:
 ### Stage 8: Tests And Manual Verification
 
 ```text
-Add practical verification for [CASE_TITLE].
+Add practical verification for Library Lending System.
 
 Instructions:
 - Add lightweight automated tests if the project setup supports it.
@@ -388,10 +345,10 @@ Instructions:
 - Cover create, view, update, and status/lifecycle actions where implemented.
 - Cover required field validation.
 - Cover invalid status or invalid input cases.
-- Cover [ROLE_1] allowed and blocked actions.
-- Cover [ROLE_2] allowed and blocked actions.
-- Cover [PROTECTED_ACTION].
-- Cover [SECONDARY_FEATURE].
+- Cover Librarian allowed and blocked actions.
+- Cover Member allowed and blocked actions.
+- Cover add, edit or remove book records.
+- Cover search or filter books by title, category or availability.
 - Include expected results and actual result placeholders.
 - After editing, list all files created or changed.
 
@@ -407,19 +364,19 @@ Output:
 ### Stage 9: Security And Validation Hardening
 
 ```text
-Review and improve security and validation for [CASE_TITLE].
+Review and improve security and validation for Library Lending System.
 
 Known security concerns:
-[SECURITY_CONCERNS]
+members must not add or delete books; members must not borrow books on behalf of other members; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
 
 Validation expectations:
-[VALIDATION_EXPECTATIONS]
+title, author, ISBN and category are required; availability status must use valid values; borrowed member and dates must match the lending state
 
 Instructions:
 - Inspect backend routes and services.
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
-- Ensure [PROTECTED_ACTION] is protected.
+- Ensure add, edit or remove book records is protected.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
@@ -438,7 +395,7 @@ Output:
 ### Stage 10: Maintainability Refactor And Documentation
 
 ```text
-Refactor [CASE_TITLE] for maintainability without changing behaviour.
+Refactor Library Lending System for maintainability without changing behaviour.
 
 Instructions:
 - Identify duplicated code.
@@ -465,8 +422,8 @@ Output:
 Use this only when the facilitator reaches Stage 11.
 
 ```text
-Apply this change request to [CASE_TITLE]:
-[CHANGE_REQUEST]
+Apply this change request to Library Lending System:
+members can reserve borrowed books, and librarians can mark reservations as fulfilled or cancelled.
 
 Instructions:
 - Do not start coding immediately.
@@ -493,15 +450,15 @@ Output:
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for [CASE_TITLE].
+Prepare a final review for Library Lending System.
 
 Instructions:
 - Inspect the completed project.
 - Summarize what was built.
 - Explain the main workflow end to end.
 - Explain the data model.
-- Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how this protected action is handled: [PROTECTED_ACTION].
+- Explain how Librarian and Member are handled.
+- Explain how this protected action is handled: add, edit or remove book records.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -527,7 +484,7 @@ Output:
 Use this at any stage when the AI response is incomplete, incorrect, too broad, unsafe, not testable, or not aligned with the selected case.
 
 ```text
-Revise the previous response for [CASE_TITLE].
+Revise the previous response for Library Lending System.
 
 Keep these constraints:
 - React frontend, Express backend, Supabase PostgreSQL database.
@@ -535,7 +492,7 @@ Keep these constraints:
 - Express must handle Supabase access.
 - Do not build a Supabase-only React app.
 - Keep the scope limited to the selected case.
-- Include [ROLE_1], [ROLE_2], [MAIN_ENTITY], [MAIN_FEATURE], [SECONDARY_FEATURE], and [PROTECTED_ACTION].
+- Include Librarian, Member, Book, book record management and borrow/return workflow, search or filter books by title, category or availability, and add, edit or remove book records.
 - Enforce role access in the backend, not only the UI.
 - Include backend validation for required fields and status values.
 - Avoid pseudocode.
@@ -543,7 +500,7 @@ Keep these constraints:
 - Include how to verify the result.
 
 Issue to fix:
-The previous response is incomplete, incorrect, or not aligned with [CASE_TITLE].
+The previous response is incomplete, incorrect, or not aligned with Library Lending System.
 ```
 
 ## Error Prompt
@@ -554,7 +511,7 @@ Use this when the app fails.
 The app failed with this error:
 
 Context:
-This is [CASE_TITLE], a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
+This is Library Lending System, a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
 
 Rules:
 - Do not change the stack.
@@ -568,4 +525,6 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
+
+
 

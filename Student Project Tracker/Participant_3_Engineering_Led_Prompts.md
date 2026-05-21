@@ -1,47 +1,4 @@
-﻿# Participant 3 Prompt Pack Template: Engineering-Led Master
-
-## Purpose
-
-Use this as the master prompt-pack template.
-
-Participant 3 is the strongest version of the workshop process. These prompts are designed to produce the best possible workshop project from the selected case: clear requirements, controlled scope, maintainable PERN structure, Supabase PostgreSQL data handling, backend access control, testing, security review, refactoring, change handling, and final explanation.
-
-Participant 2 should later be derived by reducing these prompts.
-
-Participant 1 should later be derived by removing software engineering concepts and reducing the prompts to casual AI-dependent requests.
-
-## Template Preparation Notes
-
-Before giving this prompt pack to a participant, replace these placeholders:
-
-```text
-[CASE_TITLE]
-[CLIENT_CASE_PARAGRAPH]
-[ROLE_1]
-[ROLE_2]
-[ROLE_1_ALLOWED_ACTIONS]
-[ROLE_2_ALLOWED_ACTIONS]
-[MAIN_ENTITY]
-[IMPORTANT_FIELDS]
-[STATUS_VALUES]
-[MAIN_FEATURE]
-[SECONDARY_FEATURE]
-[PROTECTED_ACTION]
-[VALIDATION_EXPECTATIONS]
-[SECURITY_CONCERNS]
-[OUT_OF_SCOPE]
-[CHANGE_REQUEST]
-```
-
-Rules for preparing this pack:
-
-- Keep the selected case small enough for the workshop.
-- Keep the stack fixed as React, Node.js/Express, and Supabase PostgreSQL.
-- Keep Express as the API layer between React and Supabase.
-- Do not allow a Supabase-only React application.
-- Keep the prompts detailed, but make them directly usable in the AI coding extension.
-- Keep Stage 12 as the shared final review prompt for fair comparison.
-- Adjust grammar and plural forms when replacing placeholders.
+﻿# Participant 3: Student Project Tracker Prompts
 
 ## Instructions
 
@@ -86,10 +43,10 @@ After changing files, list the files changed and how to run or check the result.
 You are helping build a workshop-limited PERN application.
 
 Selected case:
-[CASE_TITLE]
+Student Project Tracker
 
 Client explanation:
-[CLIENT_CASE_PARAGRAPH]
+We need a simple system to help students submit their software project details and allow supervisors to review them without relying on scattered documents and messages. A student should be able to create and update their own project submission with details such as title, description, category, student name, supervisor name, submitted date, and current status. A supervisor should be able to view submitted projects, add feedback, and update the project status. It would also help if projects could be filtered by supervisor, category, or status. Students must not be able to edit supervisor feedback or approve their own projects. This should be a small PERN prototype using React, Node.js/Express, and Supabase PostgreSQL, focused only on submission, review, feedback, and status tracking.
 
 Required stack:
 - Frontend: React
@@ -97,11 +54,11 @@ Required stack:
 - Database: Supabase PostgreSQL
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Student
+- Supervisor
 
 Main entity:
-[MAIN_ENTITY]
+Project Submission
 
 Task:
 Create or update PROJECT_CONTEXT.md in the project codebase.
@@ -110,7 +67,7 @@ Instructions:
 - Restate the selected case in your own words.
 - Define the exact workshop scope.
 - Identify the two roles and their responsibilities.
-- Identify [MAIN_ENTITY] and the main workflow.
+- Identify Project Submission and the main workflow.
 - Identify the secondary feature.
 - Identify what is out of scope.
 - Identify assumptions and missing details.
@@ -130,21 +87,21 @@ Output:
 ```text
 Use the selected case and PROJECT_CONTEXT.md.
 
-Create or update REQUIREMENTS.md for [CASE_TITLE].
+Create or update REQUIREMENTS.md for Student Project Tracker.
 
 Case details:
-- Roles: [ROLE_1], [ROLE_2]
-- [ROLE_1] actions: [ROLE_1_ALLOWED_ACTIONS]
-- [ROLE_2] actions: [ROLE_2_ALLOWED_ACTIONS]
-- Main entity: [MAIN_ENTITY]
-- Important fields: [IMPORTANT_FIELDS]
-- Initial status values before Stage 11: [STATUS_VALUES]
-- Main feature: [MAIN_FEATURE]
-- Secondary feature: [SECONDARY_FEATURE]
-- Protected action: [PROTECTED_ACTION]
-- Validation expectations: [VALIDATION_EXPECTATIONS]
-- Security concerns: [SECURITY_CONCERNS]
-- Out of scope: [OUT_OF_SCOPE]
+- Roles: Student, Supervisor
+- Student actions: create project submissions, update own editable submissions, view own status, filter own submissions
+- Supervisor actions: view submitted projects, add feedback, update project status, filter projects
+- Main entity: Project Submission
+- Important fields: title, description, category, studentName, supervisorName, submittedDate, status, feedback, createdAt, updatedAt
+- Initial status values before Stage 11: submitted, underReview, approved, rejected
+- Main feature: project submission, supervisor review, feedback and status update workflow
+- Secondary feature: filter projects by supervisor, category or status
+- Protected action: add or edit supervisor feedback and approve or reject projects
+- Validation expectations: title, description, category, student name, supervisor name and submitted date are required; status must use valid values; submitted date must be valid
+- Security concerns: students must not edit supervisor feedback; students must not approve their own projects; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
+- Out of scope: full LMS integration, file uploads, grading rubrics, team allocation, plagiarism checking
 
 Instructions:
 - Write must-have requirements only.
@@ -169,7 +126,7 @@ Output:
 ### Stage 2: PERN Architecture Backbone And Project Scaffold
 
 ```text
-Inspect the current codebase, then create or update the PERN project backbone for [CASE_TITLE].
+Inspect the current codebase, then create or update the PERN project backbone for Student Project Tracker.
 
 Required architecture:
 - React frontend
@@ -210,26 +167,26 @@ Output:
 ### Stage 3: Supabase Data Model And Database Access
 
 ```text
-Implement the database model and data access layer for [CASE_TITLE].
+Implement the database model and data access layer for Student Project Tracker.
 
 Main entity:
-[MAIN_ENTITY]
+Project Submission
 
 Important fields:
-[IMPORTANT_FIELDS]
+title, description, category, studentName, supervisorName, submittedDate, status, feedback, createdAt, updatedAt
 
 Initial status values before Stage 11:
-[STATUS_VALUES]
+submitted, underReview, approved, rejected
 
 Roles:
-[ROLE_1], [ROLE_2]
+Student, Supervisor
 
 Instructions:
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
 - Add backend Supabase client configuration using environment variables.
-- Add data access functions or service functions for [MAIN_ENTITY].
-- Keep the data model minimal but complete for [MAIN_FEATURE] and [SECONDARY_FEATURE].
+- Add data access functions or service functions for Project Submission.
+- Keep the data model minimal but complete for project submission, supervisor review, feedback and status update workflow and filter projects by supervisor, category or status.
 - Do not add unrelated entities.
 - Add example seed data if useful.
 - Update README.md or docs with database setup steps.
@@ -247,21 +204,21 @@ Output:
 ### Stage 4: UI Workflow And Frontend Skeleton
 
 ```text
-Implement the frontend workflow skeleton for [CASE_TITLE].
+Implement the frontend workflow skeleton for Student Project Tracker.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Student
+- Supervisor
 
 Main workflow:
-[MAIN_FEATURE]
+project submission, supervisor review, feedback and status update workflow
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter projects by supervisor, category or status
 
 Instructions:
-- Create role-aware screens for [ROLE_1] and [ROLE_2].
-- Create forms for the important [MAIN_ENTITY] fields.
+- Create role-aware screens for Student and Supervisor.
+- Create forms for the important Project Submission fields.
 - Create list/detail views needed for the workflow.
 - Add simple navigation.
 - Add loading, empty, success, and error states.
@@ -281,13 +238,13 @@ Output:
 ### Stage 5: Core Feature Implementation End-To-End
 
 ```text
-Implement the core feature end-to-end for [CASE_TITLE].
+Implement the core feature end-to-end for Student Project Tracker.
 
 Core feature:
-[MAIN_FEATURE]
+project submission, supervisor review, feedback and status update workflow
 
 Main entity:
-[MAIN_ENTITY]
+Project Submission
 
 Required stack:
 - React frontend
@@ -295,7 +252,7 @@ Required stack:
 - Supabase PostgreSQL
 
 Instructions:
-- Implement the case workflow actions for [MAIN_ENTITY], including create, read, update, and status/lifecycle actions where appropriate.
+- Implement the case workflow actions for Project Submission, including create, read, update, and status/lifecycle actions where appropriate.
 - Add Express routes for the core workflow.
 - Connect routes to Supabase through backend service functions.
 - Connect React screens to Express API routes.
@@ -317,14 +274,14 @@ Output:
 ### Stage 6: Authentication And Backend Authorization
 
 ```text
-Add workshop-suitable authentication and backend authorization for [CASE_TITLE].
+Add workshop-suitable authentication and backend authorization for Student Project Tracker.
 
 Roles:
-- [ROLE_1]
-- [ROLE_2]
+- Student
+- Supervisor
 
 Protected action:
-[PROTECTED_ACTION]
+add or edit supervisor feedback and approve or reject projects
 
 Instructions:
 - Add a simple login or role-selection approach suitable for the workshop.
@@ -332,7 +289,7 @@ Instructions:
 - Send role/user information to the backend in a simple workshop-safe way.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
-- Ensure [PROTECTED_ACTION] is blocked for the wrong role.
+- Ensure add or edit supervisor feedback and approve or reject projects is blocked for the wrong role.
 - Ensure users cannot modify data they should not modify.
 - Clearly mark what is simplified for the workshop.
 - After editing, list all files created or changed.
@@ -350,19 +307,19 @@ Output:
 ### Stage 7: Secondary Feature Implementation
 
 ```text
-Implement the secondary feature for [CASE_TITLE].
+Implement the secondary feature for Student Project Tracker.
 
 Secondary feature:
-[SECONDARY_FEATURE]
+filter projects by supervisor, category or status
 
 Main entity:
-[MAIN_ENTITY]
+Project Submission
 
 Instructions:
-- Keep the feature small and directly connected to [MAIN_ENTITY].
+- Keep the feature small and directly connected to Project Submission.
 - Add only the backend route/query changes needed.
 - Add only the frontend UI changes needed.
-- Ensure the feature respects [ROLE_1] and [ROLE_2] permissions.
+- Ensure the feature respects Student and Supervisor permissions.
 - Ensure backend validation still applies.
 - Do not add unrelated features.
 - After editing, list all files created or changed.
@@ -379,7 +336,7 @@ Output:
 ### Stage 8: Tests And Manual Verification
 
 ```text
-Add practical verification for [CASE_TITLE].
+Add practical verification for Student Project Tracker.
 
 Instructions:
 - Add lightweight automated tests if the project setup supports it.
@@ -388,10 +345,10 @@ Instructions:
 - Cover create, view, update, and status/lifecycle actions where implemented.
 - Cover required field validation.
 - Cover invalid status or invalid input cases.
-- Cover [ROLE_1] allowed and blocked actions.
-- Cover [ROLE_2] allowed and blocked actions.
-- Cover [PROTECTED_ACTION].
-- Cover [SECONDARY_FEATURE].
+- Cover Student allowed and blocked actions.
+- Cover Supervisor allowed and blocked actions.
+- Cover add or edit supervisor feedback and approve or reject projects.
+- Cover filter projects by supervisor, category or status.
 - Include expected results and actual result placeholders.
 - After editing, list all files created or changed.
 
@@ -407,19 +364,19 @@ Output:
 ### Stage 9: Security And Validation Hardening
 
 ```text
-Review and improve security and validation for [CASE_TITLE].
+Review and improve security and validation for Student Project Tracker.
 
 Known security concerns:
-[SECURITY_CONCERNS]
+students must not edit supervisor feedback; students must not approve their own projects; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
 
 Validation expectations:
-[VALIDATION_EXPECTATIONS]
+title, description, category, student name, supervisor name and submitted date are required; status must use valid values; submitted date must be valid
 
 Instructions:
 - Inspect backend routes and services.
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
-- Ensure [PROTECTED_ACTION] is protected.
+- Ensure add or edit supervisor feedback and approve or reject projects is protected.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
@@ -438,7 +395,7 @@ Output:
 ### Stage 10: Maintainability Refactor And Documentation
 
 ```text
-Refactor [CASE_TITLE] for maintainability without changing behaviour.
+Refactor Student Project Tracker for maintainability without changing behaviour.
 
 Instructions:
 - Identify duplicated code.
@@ -465,8 +422,8 @@ Output:
 Use this only when the facilitator reaches Stage 11.
 
 ```text
-Apply this change request to [CASE_TITLE]:
-[CHANGE_REQUEST]
+Apply this change request to Student Project Tracker:
+supervisors can request revisions, and students can edit and resubmit only submissions with revision requested status.
 
 Instructions:
 - Do not start coding immediately.
@@ -493,15 +450,15 @@ Output:
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for [CASE_TITLE].
+Prepare a final review for Student Project Tracker.
 
 Instructions:
 - Inspect the completed project.
 - Summarize what was built.
 - Explain the main workflow end to end.
 - Explain the data model.
-- Explain how [ROLE_1] and [ROLE_2] are handled.
-- Explain how this protected action is handled: [PROTECTED_ACTION].
+- Explain how Student and Supervisor are handled.
+- Explain how this protected action is handled: add or edit supervisor feedback and approve or reject projects.
 - Explain the validation rules.
 - Explain the security checks and remaining risks.
 - Explain the tests or manual checks completed.
@@ -527,7 +484,7 @@ Output:
 Use this at any stage when the AI response is incomplete, incorrect, too broad, unsafe, not testable, or not aligned with the selected case.
 
 ```text
-Revise the previous response for [CASE_TITLE].
+Revise the previous response for Student Project Tracker.
 
 Keep these constraints:
 - React frontend, Express backend, Supabase PostgreSQL database.
@@ -535,7 +492,7 @@ Keep these constraints:
 - Express must handle Supabase access.
 - Do not build a Supabase-only React app.
 - Keep the scope limited to the selected case.
-- Include [ROLE_1], [ROLE_2], [MAIN_ENTITY], [MAIN_FEATURE], [SECONDARY_FEATURE], and [PROTECTED_ACTION].
+- Include Student, Supervisor, Project Submission, project submission, supervisor review, feedback and status update workflow, filter projects by supervisor, category or status, and add or edit supervisor feedback and approve or reject projects.
 - Enforce role access in the backend, not only the UI.
 - Include backend validation for required fields and status values.
 - Avoid pseudocode.
@@ -543,7 +500,7 @@ Keep these constraints:
 - Include how to verify the result.
 
 Issue to fix:
-The previous response is incomplete, incorrect, or not aligned with [CASE_TITLE].
+The previous response is incomplete, incorrect, or not aligned with Student Project Tracker.
 ```
 
 ## Error Prompt
@@ -554,7 +511,7 @@ Use this when the app fails.
 The app failed with this error:
 
 Context:
-This is [CASE_TITLE], a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
+This is Student Project Tracker, a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
 
 Rules:
 - Do not change the stack.
@@ -568,4 +525,6 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
+
+
 
