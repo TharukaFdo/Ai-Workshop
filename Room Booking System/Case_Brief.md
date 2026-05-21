@@ -1,0 +1,3 @@
+# Room Booking System
+
+We need a simple room booking system because shared rooms are currently booked manually and conflicts are hard to track. A staff member should be able to request a room by entering the room name, date, start time, end time, purpose, and their name, then view the status of their own booking. A coordinator should be able to view all room booking requests and approve, reject, or update their status with a note. It would also help if bookings could be filtered by room, date, or status. Staff should not be able to approve bookings or edit other users' bookings unless allowed. This should be a small PERN application using React, Node.js/Express, and Supabase PostgreSQL, focused only on the booking workflow.

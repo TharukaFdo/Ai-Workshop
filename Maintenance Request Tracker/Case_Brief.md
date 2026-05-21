@@ -1,0 +1,3 @@
+# Maintenance Request Tracker
+
+We need a simple system for people to report maintenance problems and for technicians to update the progress of the work. A requester should be able to submit a maintenance request with a title, description, location, priority, and their name, then view the current status. A technician should be able to view submitted requests, add technician notes, update the progress, and close a request after the work is completed. It would also help if requests could be filtered by location, priority, or status. Requesters should not be able to close requests or edit technician notes. This should be a small prototype built with React, Node.js/Express, and Supabase PostgreSQL, focused on request submission, progress updates, and closure.
