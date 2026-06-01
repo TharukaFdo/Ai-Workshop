@@ -1,4 +1,4 @@
-﻿# Participant 3: Inventory Request System Prompts
+# Participant 3: Inventory Request System Prompts
 
 ## Instructions
 
@@ -30,11 +30,11 @@ React must call Express API routes. Express must handle Supabase database access
 Do not build a Supabase-only React app.
 Keep the project small and focused on the selected case.
 Do not add features outside the client case unless the prompt asks for them.
+Do only the current stage. Do not implement future-stage functionality early.
 Prefer complete working code over pseudocode.
 Before changing files, inspect the current structure.
 After changing files, list the files changed and how to run or check the result.
 ```
-
 ## Copy-Paste Prompts
 
 ### Stage 0: Case Scope, Assumptions, And Working Notes
@@ -108,9 +108,10 @@ Instructions:
 - Create acceptance criteria for each must-have requirement.
 - Create a role-permission matrix.
 - Define backend-enforced protected actions.
+- Define the need for a database-backed prototype login table or auth mechanism.
 - Define validation rules.
 - Define failure cases.
-- Define minimum tests or manual checks.
+- Define minimum automated tests and any manual checks.
 - Keep the scope suitable for a one-day workshop.
 - Do not write application code yet.
 
@@ -142,7 +143,9 @@ Instructions:
 - Add .env.example files without real secrets.
 - Add package scripts to run frontend and backend.
 - Add a README.md with setup and run steps.
+- Prepare a placeholder for DATABASE_URL in backend .env.example.
 - Do not implement all business features yet.
+- Do not implement login, full CRUD, or secondary features in this stage.
 - Do not add unrelated frameworks.
 - After editing, list all files created or changed.
 
@@ -181,24 +184,40 @@ pending, approved, rejected, issued
 Roles:
 Staff member, Storekeeper
 
+Supabase PostgreSQL connection information to use:
+DATABASE_URL: [SUPABASE_DATABASE_URL]
+Database password: [SUPABASE_DATABASE_PASSWORD]
+
 Instructions:
+- Use direct PostgreSQL access from the Express backend with pg and DATABASE_URL.
+- Do not use Supabase URL/key style configuration for database queries.
+- Put DATABASE_URL only in backend .env files. Never expose database credentials in React.
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
+- Include a database-backed prototype login table, for example app_users, with role and ownership/identity fields for the two roles.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
-- Add backend Supabase client configuration using environment variables.
+- Add backend database configuration using environment variables.
 - Add data access functions or service functions for Inventory Request.
-- Keep the data model minimal but complete for inventory request submission, approval/rejection and issue workflow and filter requests by item name, requester or status.
+- Keep the data model minimal but complete for the main workflow and secondary feature.
 - Do not add unrelated entities.
-- Add example seed data if useful.
+- Add example seed data, including demo users for the two roles.
+- Add a repeatable non-destructive database setup script, for example npm run db:setup.
+- Add a clearly labelled demo reset script only if reset is needed.
+- Plan for automated tests to create clearly labelled test records in the same Supabase database and clean them up.
+- Do not use fake, browser-only, or in-memory storage.
+- Do not implement UI features in this stage.
 - Update README.md or docs with database setup steps.
+- Run or describe a database connection/setup check and report the result.
 - After editing, list all files created or changed.
 
 Output:
 1. SQL schema
-2. Supabase configuration
+2. Database configuration
 3. Data access/service code
 4. Example data if useful
-5. Setup instructions
-6. Risks or assumptions
+5. Demo users/login table setup
+6. Setup and test-data cleanup instructions
+7. Connection/setup check result
+8. Risks or assumptions
 ```
 
 ### Stage 4: UI Workflow And Frontend Skeleton
@@ -284,13 +303,17 @@ Protected action:
 approve or reject requests, mark items issued, and edit storekeeper notes
 
 Instructions:
-- Add a simple login or role-selection approach suitable for the workshop.
-- Store the current user role clearly in the app state.
-- Send role/user information to the backend in a simple workshop-safe way.
+- Add database-backed prototype login using the users/login table from Stage 3.
+- Do not store credentials only in React.
+- If a password dependency is reasonable, store seeded demo passwords as hashes.
+- Add a backend login endpoint that verifies the user and returns the authenticated user role and identity.
+- Store the authenticated user role and identity clearly in the app state.
+- Send authenticated user information to the backend in a simple workshop-safe way.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
 - Ensure approve or reject requests, mark items issued, and edit storekeeper notes is blocked for the wrong role.
 - Ensure users cannot modify data they should not modify.
+- Ensure the second role can access only their assigned/owned records where the case requires it.
 - Clearly mark what is simplified for the workshop.
 - After editing, list all files created or changed.
 
@@ -333,23 +356,82 @@ Output:
 6. Risks introduced
 ```
 
+### Mid Review Stage
+
+Use this after Stage 7 and before Stage 8. This is the same review prompt used by all three participant types for fair comparison.
+
+```text
+Conduct a mid-project review for Inventory Request System.
+
+This is review only.
+Do not modify application source code.
+Do not modify database schema or seed data.
+Do not install packages.
+Do not create tests.
+Do not fix issues.
+Only create or update MID_REVIEW.md.
+
+Case details:
+- Roles: Staff member, Storekeeper
+- Main entity: Inventory Request
+- Main workflow: inventory request submission, approval/rejection and issue workflow
+- Secondary feature: filter requests by item name, requester or status
+- Protected action: approve or reject requests, mark items issued, and edit storekeeper notes
+
+Review the project as it currently exists after the secondary feature stage and before testing, security hardening, and maintainability cleanup.
+
+Check:
+- Whether the app appears runnable.
+- Whether React frontend and Express backend are separated.
+- Whether React calls Express routes instead of Supabase directly.
+- Whether Supabase uses DATABASE_URL in the backend without exposing secrets in React.
+- Whether the needed database tables appear to exist, including whether a users/login table exists.
+- Whether there is a repeatable database setup or seed command.
+- Whether login is database-backed, mock-only, role-selector-only, or missing.
+- Whether role restrictions are enforced in the backend, not only the UI.
+- Whether approve or reject requests, mark items issued, and edit storekeeper notes appears protected.
+- Whether users appear limited to their own allowed records where relevant.
+- Whether inventory request submission, approval/rejection and issue workflow appears implemented.
+- Whether filter requests by item name, requester or status appears implemented.
+- Whether validation is present.
+- Whether the AI implemented future stages early.
+- What is missing before testing, security hardening, and maintainability cleanup.
+
+Save the review in MID_REVIEW.md with:
+1. Mid-review summary
+2. Current feature status
+3. Database and persistence status
+4. Login and role/access status
+5. Protected action status
+6. Validation status
+7. Stage drift or early implementation
+8. Issues found before Stage 8
+9. Manual checks recommended next
+10. Pass/fail table
+```
+
 ### Stage 8: Tests And Manual Verification
 
 ```text
 Add practical verification for Inventory Request System.
 
 Instructions:
-- Add lightweight automated tests if the project setup supports it.
-- If automated tests are not practical, create docs/TEST_PLAN.md with manual checks.
+- Add lightweight automated tests and expose them through a clear command, for example npm test.
+- Use clearly labelled test records in the same Supabase database and clean them up after tests.
+- Do not rely only on manual checks.
 - Cover the main workflow.
 - Cover create, view, update, and status/lifecycle actions where implemented.
 - Cover required field validation.
+- Cover database setup or at least database connectivity.
+- Cover database-backed login.
 - Cover invalid status or invalid input cases.
 - Cover Staff member allowed and blocked actions.
 - Cover Storekeeper allowed and blocked actions.
+- Cover users trying to access records outside their role/identity.
 - Cover approve or reject requests, mark items issued, and edit storekeeper notes.
 - Cover filter requests by item name, requester or status.
 - Include expected results and actual result placeholders.
+- Add docs/TEST_PLAN.md as a supplement to the automated tests.
 - After editing, list all files created or changed.
 
 Output:
@@ -376,7 +458,10 @@ Instructions:
 - Inspect backend routes and services.
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
-- Ensure approve or reject requests, mark items issued, and edit storekeeper notes is protected.
+- Ensure the protected action is protected.
+- Ensure authenticated identity is used for protected actions, not only a client-supplied role selector.
+- Ensure users cannot access records outside their allowed role/identity.
+- Ensure fake/in-memory storage is not masking database failures.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
@@ -432,7 +517,7 @@ Instructions:
 - Apply the smallest safe change.
 - Do not rewrite the whole app.
 - Keep the project within the selected case scope.
-- Update tests or docs/TEST_PLAN.md.
+- Update database setup scripts, automated tests, and docs/TEST_PLAN.md.
 - Update README.md or PROJECT_CONTEXT.md if needed.
 - After editing, list all files created or changed.
 
@@ -450,35 +535,55 @@ Output:
 ### Stage 12: Final Review
 
 ```text
-Prepare a final review for Inventory Request System.
+Prepare a final evidence-based review for Inventory Request System.
 
 Instructions:
-- Inspect the completed project.
+- This is review only.
+- Do not modify application source code, database schema, seed data, package files, or configuration.
+- Only create or update FINAL_REVIEW.md.
+- Inspect the actual completed project files before answering.
+- Do not say the project is complete unless the files, database setup, login, role checks, and tests prove it.
 - Summarize what was built.
 - Explain the main workflow end to end.
-- Explain the data model.
-- Explain how Staff member and Storekeeper are handled.
-- Explain how this protected action is handled: approve or reject requests, mark items issued, and edit storekeeper notes.
+- List the final project structure.
+- Explain whether React and Express are separated.
+- Explain whether React calls Express, not Supabase directly.
+- Explain the database connection method. Say whether DATABASE_URL is configured, but do not print the password.
+- List the database tables used and whether a users/login table exists.
+- Explain how tables and seed data are created again if needed.
+- Explain how test data is created and cleaned up.
+- Explain how the two roles log in and how roles are checked.
+- Explain how the protected action for this case is handled.
 - Explain the validation rules.
-- Explain the security checks and remaining risks.
-- Explain the tests or manual checks completed.
+- Explain which backend role checks exist and which actions they protect.
+- Explain whether users can access only their own allowed records.
+- Explain the automated test command, what it checks, and the result.
+- If only manual checks exist, say clearly what was not automated.
 - Explain what changed after Stage 11.
+- Identify anything that was built before its stage.
+- Identify any mismatch between documents and code.
+- Identify any exposed secret risk without printing secrets.
 - Identify known limitations.
 - Create a short demo script.
 - Create viva questions a supervisor could ask.
 
 Output:
 1. Final feature summary
-2. Demo script
-3. Data model explanation
-4. Role/access explanation
-5. Testing summary
-6. Security summary
-7. Stage 11 change summary
-8. Known limitations
-9. Suggested viva questions
+2. Project structure and run commands
+3. Frontend/backend separation check
+4. Database setup and table summary
+5. Login and role/access explanation
+6. Protected action explanation
+7. Validation summary
+8. Automated and manual testing summary
+9. Stage 11 change summary
+10. Stage drift or early work
+11. Security risks and exposed-secret check
+12. Documentation/code mismatches
+13. Known limitations
+14. Demo script
+15. Suggested viva questions
 ```
-
 ## Reusable Quality Recovery Prompt
 
 Use this at any stage when the AI response is incomplete, incorrect, too broad, unsafe, not testable, or not aligned with the selected case.
@@ -494,7 +599,11 @@ Keep these constraints:
 - Keep the scope limited to the selected case.
 - Include Staff member, Storekeeper, Inventory Request, inventory request submission, approval/rejection and issue workflow, filter requests by item name, requester or status, and approve or reject requests, mark items issued, and edit storekeeper notes.
 - Enforce role access in the backend, not only the UI.
+- Use database-backed prototype login, not frontend-only hard-coded accounts.
+- Use real Supabase PostgreSQL through Express, not fake/in-memory storage.
 - Include backend validation for required fields and status values.
+- Include automated verification where practical.
+- Do only the current stage.
 - Avoid pseudocode.
 - List exact files to create or change.
 - Include how to verify the result.
@@ -502,7 +611,6 @@ Keep these constraints:
 Issue to fix:
 The previous response is incomplete, incorrect, or not aligned with Inventory Request System.
 ```
-
 ## Error Prompt
 
 Use this when the app fails.
@@ -525,6 +633,3 @@ Instructions:
 - Show exact file changes.
 - Explain how to verify the fix.
 ```
-
-
-

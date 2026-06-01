@@ -47,6 +47,9 @@ Required before the workshop:
 - GitHub Copilot access.
 - Node.js and npm.
 - Supabase account.
+- Supabase PostgreSQL connection string for each participant or group.
+- Supabase database password for the supplied connection string.
+- Clear test-data cleanup rule for automated tests using the same Supabase database.
 - Ability to run a local React and Node.js/Express project.
 
 Participants should not switch to another stack during the workshop.
@@ -61,11 +64,13 @@ Minimum project scope:
 - One main feature or lifecycle workflow.
 - Two user roles.
 - Login or user access.
+- Database-backed prototype users/login table.
 - One protected action.
 - One secondary feature.
 - Input validation.
 - Supabase PostgreSQL storage.
-- Basic testing.
+- Repeatable database setup or seed script.
+- Basic automated testing where practical.
 - Security review.
 - Maintainability improvement.
 - One late change request.
@@ -105,20 +110,30 @@ This documentation rule is intentional. It helps compare whether persistent inst
 
 The workshop follows these stages. At each stage, participants copy and paste only the next prompt from their assigned prompt pack.
 
+The Mid Review Stage is a review-only AI prompt used after Stage 7 and before Stage 8. It saves `MID_REVIEW.md` and must not change source code, database schema, seed data, package files, or configuration.
+
+Each case folder also includes two participant-facing walkthrough checklists:
+
+- `Mid_Functionality_Walkthrough.md` is used after the Mid Review Stage to manually validate the raw app before testing, security, and maintainability work.
+- `Final_Functionality_Walkthrough.md` is used after the Final Review to manually validate the completed app.
+
+The walkthrough files are not AI prompts. Participants use them directly as manual checking guides.
+
 Stage 11 should only be pasted when the facilitator reaches the change request checkpoint.
 
-Stage 12 uses the same final review prompt across all three participants so the outputs are directly comparable.
+Stage 12 uses the same final review prompt across all three participants so the outputs are directly comparable. It saves `FINAL_REVIEW.md` and must not change the application.
 
 | Stage | Focus |
 |---|---|
 | 0 | Case selection and setup |
 | 1 | Initial project interpretation |
 | 2 | System design and architecture backbone |
-| 3 | Data and domain modeling |
+| 3 | Data and domain modeling, Supabase connection setup, seed data, and test-data cleanup |
 | 4 | UI and workflow design |
 | 5 | Core feature implementation |
 | 6 | Authentication and authorization |
 | 7 | Secondary feature or workflow |
+| Mid Review Stage | Review-only raw project audit before testing, security, and maintainability |
 | 8 | Testing and verification |
 | 9 | Security and validation improvement |
 | 10 | Maintainability and refactoring |
