@@ -71,7 +71,7 @@ Implement book record management and borrow/return workflow for book with React 
 ### Stage 6: Authentication And Authorization
 
 ```text
-Add database-backed login and authorization for librarian and member. Protect add, edit or remove book records in backend and UI. Use the users/login table from Stage 3. Do not use hard-coded frontend-only accounts.
+Add database-backed login and authorization for librarian and member. Use the users/login table from Stage 3. Use a simple login-issued user identity or session token for later requests. Protected backend routes must look up/check the user's role and ownership from the database before allowing actions. Do not trust a role, user type, or owner name sent directly from the browser as proof of permission. Protect add, edit or remove book records in backend and UI. Do not use hard-coded frontend-only accounts.
 ```
 
 ### Stage 7: Secondary Feature
@@ -121,17 +121,50 @@ Check:
 - Whether the AI implemented future stages early.
 - What is missing before testing, security hardening, and maintainability cleanup.
 
+Use the same review process and scoring matrix that will be used in the final review, so the before/after comparison is fair.
+
+Create a review scoring matrix in MID_REVIEW.md before the issue list. Score each row from 0 to 5.
+
+Score meaning:
+- 0 = missing
+- 1 = present but mostly not working
+- 2 = partially working with major gaps
+- 3 = mostly working with important gaps
+- 4 = working with minor gaps
+- 5 = complete for workshop scope
+
+For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
+
 Save the review in MID_REVIEW.md with:
 1. Mid-review summary
-2. Current feature status
-3. Database and persistence status
-4. Login and role/access status
-5. Protected action status
-6. Validation status
-7. Stage drift or early implementation
-8. Issues found before Stage 8
-9. Manual checks recommended next
-10. Pass/fail table
+2. Review scoring matrix
+3. Current feature status
+4. Database and persistence status
+5. Login and role/access status
+6. Protected action status
+7. Validation status
+8. Stage drift or early implementation
+9. Issues found before Stage 8
+10. Manual checks recommended next
+11. Pass/fail table
 ```
 
 ### Stage 8: Testing
@@ -139,13 +172,13 @@ Save the review in MID_REVIEW.md with:
 ```text
 Create automated backend tests and a test command for the main workflow, validation, login, roles, add, edit or remove book records, and search or filter books by title, category or availability.
 Use clearly labelled test records in the same Supabase database and clean them up after tests.
-Add manual checks only as a supplement.
+Add manual checks only as a supplement. Include a check that direct role/owner spoofing from browser headers, request body, or query parameters is rejected.
 ```
 
 ### Stage 9: Security And Validation
 
 ```text
-Review security and validation. Fix required fields, backend role access, users accessing records outside their role, exposed secrets, fake/in-memory storage, and bad error handling.
+Review security and validation. Fix required fields, backend role access, login-to-authorization gaps, raw role/owner headers, users accessing records outside their role, exposed secrets, fake/in-memory storage, and bad error handling.
 ```
 
 ### Stage 10: Maintainability
@@ -196,30 +229,52 @@ Instructions:
 - Identify known limitations.
 - Create a short demo script.
 - Create viva questions a supervisor could ask.
+- Create the same review scoring matrix used in the Mid Review, using the same rows, columns, and 0 to 5 score scale.
+- For the Final Review, score the completed project after testing, security hardening, maintainability cleanup, and the change request.
+- For the Testing Evidence column, score implemented automated tests, manual checks, cleanup of test data, and reported test results.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
 
 Output:
 1. Final feature summary
-2. Project structure and run commands
-3. Frontend/backend separation check
-4. Database setup and table summary
-5. Login and role/access explanation
-6. Protected action explanation
-7. Validation summary
-8. Automated and manual testing summary
-9. Stage 11 change summary
-10. Stage drift or early work
-11. Security risks and exposed-secret check
-12. Documentation/code mismatches
-13. Known limitations
-14. Demo script
-15. Suggested viva questions
+2. Review scoring matrix
+3. Project structure and run commands
+4. Frontend/backend separation check
+5. Database setup and table summary
+6. Login and role/access explanation
+7. Protected action explanation
+8. Validation summary
+9. Automated and manual testing summary
+10. Stage 11 change summary
+11. Stage drift or early work
+12. Security risks and exposed-secret check
+13. Documentation/code mismatches
+14. Known limitations
+15. Demo script
+16. Suggested viva questions
 ```
 ## Reusable Failure Prompt
 
 Use this at any stage when the AI output is incomplete, incorrect, too broad, or not aligned with the selected case.
 
 ```text
-Revise for Library Lending System. Keep PERN, small scope, librarian, member, book, validation, backend role access, database-backed login, add, edit or remove book records, search or filter books by title, category or availability, and fix the issue, automated checks, and do only the current stage.
+Revise for Library Lending System. Keep PERN, small scope, librarian, member, book, validation, backend role access, database-backed login, add, edit or remove book records, search or filter books by title, category or availability, automated checks, and fix the issue. Do only the current stage.
 ```
 ## Error Prompt
 

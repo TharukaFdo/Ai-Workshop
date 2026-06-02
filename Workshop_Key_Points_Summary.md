@@ -43,8 +43,8 @@ Supabase is used as the managed PostgreSQL database. The Express backend remains
 
 Required before the workshop:
 
-- VS Code.
-- GitHub Copilot access.
+- Antigravity IDE installed and ready to use.
+- Antigravity IDE AI chat/agent access.
 - Node.js and npm.
 - Supabase account.
 - Supabase PostgreSQL connection string for each participant or group.
@@ -53,6 +53,8 @@ Required before the workshop:
 - Ability to run a local React and Node.js/Express project.
 
 Participants should not switch to another stack during the workshop.
+
+Distribution note: participant handouts should include only the case brief, assigned prompt pack, templates, and workshop summary. Do not distribute generated project output folders, `.env` files, node_modules folders, or chat histories that contain supplied database credentials.
 
 ## 4. Project Requirements
 
@@ -112,16 +114,13 @@ The workshop follows these stages. At each stage, participants copy and paste on
 
 The Mid Review Stage is a review-only AI prompt used after Stage 7 and before Stage 8. It saves `MID_REVIEW.md` and must not change source code, database schema, seed data, package files, or configuration.
 
-Each case folder also includes two participant-facing walkthrough checklists:
+The Mid Review must include the shared review scoring matrix. The same matrix structure is used again in the Final Review so staff can compare the project before and after testing, security hardening, maintainability cleanup, and the change request.
 
-- `Mid_Functionality_Walkthrough.md` is used after the Mid Review Stage to manually validate the raw app before testing, security, and maintainability work.
-- `Final_Functionality_Walkthrough.md` is used after the Final Review to manually validate the completed app.
-
-The walkthrough files are not AI prompts. Participants use them directly as manual checking guides.
+Each major feature or area is scored from 0 to 5 for functionality, data persistence, backend role/security control, validation/error handling, testing evidence, maintainability, and UI/manual usability. This allows staff to compare the three outputs without reading the full codebase first.
 
 Stage 11 should only be pasted when the facilitator reaches the change request checkpoint.
 
-Stage 12 uses the same final review prompt across all three participants so the outputs are directly comparable. It saves `FINAL_REVIEW.md` and must not change the application.
+Stage 12 uses the same final review prompt across all three participants so the outputs are directly comparable. It saves `FINAL_REVIEW.md` and must not change the application. The final review must use the same scoring matrix rows, columns, and 0 to 5 scale as the Mid Review.
 
 | Stage | Focus |
 |---|---|
@@ -162,6 +161,7 @@ Intentionally different:
 
 The final discussion should compare:
 
+- The mid and final scoring matrices.
 - What looked complete but failed under review.
 - Which version had real authentication and authorization.
 - Which version handled testing and security better.

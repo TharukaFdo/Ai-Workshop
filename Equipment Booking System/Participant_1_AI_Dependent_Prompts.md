@@ -35,17 +35,16 @@ Set up the project files so I can run the app. Only create the basic React front
 ### Stage 3: Save The Main Thing
 
 ```text
-Make bookings save in Supabase and show again.
+Make bookings save in Supabase and show again even after refresh.
 
-Use this Supabase PostgreSQL database information:
+Use these Supabase PostgreSQL database details:
 DATABASE_URL: [SUPABASE_DATABASE_URL]
 Database password: [SUPABASE_DATABASE_PASSWORD]
 
-Put the database connection only in the backend .env file.
-Create the needed table or tables and starter records now.
-Add a simple command to create the demo tables again if needed.
-Do not use fake, browser-only, or in-memory storage.
-Only do this database-saving step.
+Keep the database password out of React or browser code.
+Add an easy command I can run if the demo data needs to be prepared again.
+Do not use temporary browser storage or sample-only data.
+Only do this saving step.
 ```
 
 ### Stage 4: Make The Screens
@@ -65,7 +64,8 @@ Add creating, viewing, updating, approving and rejecting equipment bookings.
 ```text
 Add login for staff member and lab assistant.
 Save login users in Supabase, not only inside React.
-Keep it simple, but make the backend check login and role before protected actions.
+The server should decide what each logged-in person is allowed to do.
+Do not let the browser decide the role by itself.
 Only do this login step.
 ```
 
@@ -116,17 +116,50 @@ Check:
 - Whether the AI implemented future stages early.
 - What is missing before testing, security hardening, and maintainability cleanup.
 
+Use the same review process and scoring matrix that will be used in the final review, so the before/after comparison is fair.
+
+Create a review scoring matrix in MID_REVIEW.md before the issue list. Score each row from 0 to 5.
+
+Score meaning:
+- 0 = missing
+- 1 = present but mostly not working
+- 2 = partially working with major gaps
+- 3 = mostly working with important gaps
+- 4 = working with minor gaps
+- 5 = complete for workshop scope
+
+For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
+
 Save the review in MID_REVIEW.md with:
 1. Mid-review summary
-2. Current feature status
-3. Database and persistence status
-4. Login and role/access status
-5. Protected action status
-6. Validation status
-7. Stage drift or early implementation
-8. Issues found before Stage 8
-9. Manual checks recommended next
-10. Pass/fail table
+2. Review scoring matrix
+3. Current feature status
+4. Database and persistence status
+5. Login and role/access status
+6. Protected action status
+7. Validation status
+8. Stage drift or early implementation
+9. Issues found before Stage 8
+10. Manual checks recommended next
+11. Pass/fail table
 ```
 
 ### Stage 8: Check The App
@@ -192,23 +225,45 @@ Instructions:
 - Identify known limitations.
 - Create a short demo script.
 - Create viva questions a supervisor could ask.
+- Create the same review scoring matrix used in the Mid Review, using the same rows, columns, and 0 to 5 score scale.
+- For the Final Review, score the completed project after testing, security hardening, maintainability cleanup, and the change request.
+- For the Testing Evidence column, score implemented automated tests, manual checks, cleanup of test data, and reported test results.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
 
 Output:
 1. Final feature summary
-2. Project structure and run commands
-3. Frontend/backend separation check
-4. Database setup and table summary
-5. Login and role/access explanation
-6. Protected action explanation
-7. Validation summary
-8. Automated and manual testing summary
-9. Stage 11 change summary
-10. Stage drift or early work
-11. Security risks and exposed-secret check
-12. Documentation/code mismatches
-13. Known limitations
-14. Demo script
-15. Suggested viva questions
+2. Review scoring matrix
+3. Project structure and run commands
+4. Frontend/backend separation check
+5. Database setup and table summary
+6. Login and role/access explanation
+7. Protected action explanation
+8. Validation summary
+9. Automated and manual testing summary
+10. Stage 11 change summary
+11. Stage drift or early work
+12. Security risks and exposed-secret check
+13. Documentation/code mismatches
+14. Known limitations
+15. Demo script
+16. Suggested viva questions
 ```
 ## Reusable Failure Prompt
 
@@ -218,7 +273,7 @@ Use this at any stage when the AI output is wrong, too big, incomplete, broken, 
 This is wrong. Make it match the equipment booking app, keep it simple, and fix it.
 Do only the current stage.
 Keep React, Express, and Supabase.
-Do not use fake/in-memory storage when Supabase is required.
+Do not save only in browser memory when Supabase is required.
 Do not put database secrets in React.
 ```
 ## Error Prompt

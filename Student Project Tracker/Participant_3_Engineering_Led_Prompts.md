@@ -17,6 +17,8 @@ Reject output that:
 - Adds unrelated features.
 - Rewrites the whole project unnecessarily.
 - Stores secrets in frontend code.
+- Uses client-supplied role or owner headers as authorization proof.
+- Leaves unused Supabase SDK config or dependencies.
 
 You may keep instruction `.md` files in the project codebase when the prompts ask for them.
 
@@ -28,6 +30,8 @@ These rules are already included across the stage prompts. If the AI drifts, pas
 Use React for the frontend, Node.js/Express for the backend, and Supabase PostgreSQL for the database.
 React must call Express API routes. Express must handle Supabase database access.
 Do not build a Supabase-only React app.
+Use direct PostgreSQL access from Express with pg; do not add unused Supabase SDK clients/config.
+If frontend environment variables are needed, use only a non-secret API URL such as VITE_API_URL.
 Keep the project small and focused on the selected case.
 Do not add features outside the client case unless the prompt asks for them.
 Do only the current stage. Do not implement future-stage functionality early.
@@ -141,7 +145,7 @@ Instructions:
 - Keep the structure simple and workshop-friendly.
 - Create clear frontend, backend, config, and documentation areas.
 - Add .env.example files without real secrets.
-- Add package scripts to run frontend and backend.
+- Add package scripts to run frontend and backend. If a root package.json is created, its scripts must delegate to real frontend/backend commands; do not leave placeholder scripts that fail.
 - Add a README.md with setup and run steps.
 - Prepare a placeholder for DATABASE_URL in backend .env.example.
 - Do not implement all business features yet.
@@ -190,8 +194,8 @@ Database password: [SUPABASE_DATABASE_PASSWORD]
 
 Instructions:
 - Use direct PostgreSQL access from the Express backend with pg and DATABASE_URL.
-- Do not use Supabase URL/key style configuration for database queries.
-- Put DATABASE_URL only in backend .env files. Never expose database credentials in React.
+- Do not use Supabase URL/key style configuration for database queries. Do not install or scaffold @supabase/supabase-js for this workshop unless it is actively used; prefer pg only and remove unused SDK config.
+- Put DATABASE_URL only in backend .env files. Never expose database credentials in React. If the frontend needs an environment variable, use only a non-secret API base URL such as VITE_API_URL.
 - Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
 - Include a database-backed prototype login table, for example app_users, with role and ownership/identity fields for the two roles.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
@@ -242,7 +246,7 @@ Instructions:
 - Add simple navigation.
 - Add loading, empty, success, and error states.
 - Add basic client-side checks, but do not rely on frontend checks for security.
-- Keep styling simple and readable.
+- Make the UI polished and clearly better than a basic scaffold. Use a responsive dashboard layout, clear role-specific sections, status badges, useful loading/empty/error states, and subtle transitions or animations. Avoid putting most styling inline in App.jsx; use a maintainable CSS file or clear component styling structure.
 - Do not add unnecessary landing pages.
 - After editing, list all files created or changed.
 
@@ -308,7 +312,7 @@ Instructions:
 - If a password dependency is reasonable, store seeded demo passwords as hashes.
 - Add a backend login endpoint that verifies the user and returns the authenticated user role and identity.
 - Store the authenticated user role and identity clearly in the app state.
-- Send authenticated user information to the backend in a simple workshop-safe way.
+- Send authenticated user information to the backend using a simple signed token/session if practical. If a simplified user ID token is used, never trust role, owner, or doctor/resource names sent directly by the browser; protected routes must load role and ownership from the database.
 - Enforce protected actions in Express middleware or route handlers.
 - Do not rely only on hiding buttons in React.
 - Ensure add or edit supervisor feedback and approve or reject projects is blocked for the wrong role.
@@ -397,17 +401,50 @@ Check:
 - Whether the AI implemented future stages early.
 - What is missing before testing, security hardening, and maintainability cleanup.
 
+Use the same review process and scoring matrix that will be used in the final review, so the before/after comparison is fair.
+
+Create a review scoring matrix in MID_REVIEW.md before the issue list. Score each row from 0 to 5.
+
+Score meaning:
+- 0 = missing
+- 1 = present but mostly not working
+- 2 = partially working with major gaps
+- 3 = mostly working with important gaps
+- 4 = working with minor gaps
+- 5 = complete for workshop scope
+
+For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
+
 Save the review in MID_REVIEW.md with:
 1. Mid-review summary
-2. Current feature status
-3. Database and persistence status
-4. Login and role/access status
-5. Protected action status
-6. Validation status
-7. Stage drift or early implementation
-8. Issues found before Stage 8
-9. Manual checks recommended next
-10. Pass/fail table
+2. Review scoring matrix
+3. Current feature status
+4. Database and persistence status
+5. Login and role/access status
+6. Protected action status
+7. Validation status
+8. Stage drift or early implementation
+9. Issues found before Stage 8
+10. Manual checks recommended next
+11. Pass/fail table
 ```
 
 ### Stage 8: Tests And Manual Verification
@@ -416,7 +453,7 @@ Save the review in MID_REVIEW.md with:
 Add practical verification for Student Project Tracker.
 
 Instructions:
-- Add lightweight automated tests and expose them through a clear command, for example npm test.
+- Add lightweight automated tests and expose them through a clear command, for example npm test. If a root package exists, root npm test must run the backend tests or README must clearly direct the exact backend test command; do not leave a failing placeholder test script.
 - Use clearly labelled test records in the same Supabase database and clean them up after tests.
 - Do not rely only on manual checks.
 - Cover the main workflow.
@@ -459,12 +496,13 @@ Instructions:
 - Ensure required fields are validated on the backend.
 - Ensure role checks happen on the backend.
 - Ensure the protected action is protected.
-- Ensure authenticated identity is used for protected actions, not only a client-supplied role selector.
+- Ensure authenticated identity is used for protected actions, not client-supplied role, owner, or doctor/resource headers.
 - Ensure users cannot access records outside their allowed role/identity.
 - Ensure fake/in-memory storage is not masking database failures.
 - Ensure frontend secrets are not exposed.
 - Ensure Supabase service keys are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
+- Remove unused Supabase SDK clients/config if the project uses pg with DATABASE_URL.
 - Apply focused fixes only.
 - Update docs/TEST_PLAN.md or tests with any new checks.
 - After editing, list all files created or changed.
@@ -484,6 +522,7 @@ Refactor Student Project Tracker for maintainability without changing behaviour.
 
 Instructions:
 - Identify duplicated code.
+- Remove dead scaffolding, unused config files, and unused dependencies.
 - Identify unclear names.
 - Identify oversized files or mixed responsibilities.
 - Move repeated API calls, validation logic, or constants into reusable helpers where useful.
@@ -566,23 +605,45 @@ Instructions:
 - Identify known limitations.
 - Create a short demo script.
 - Create viva questions a supervisor could ask.
+- Create the same review scoring matrix used in the Mid Review, using the same rows, columns, and 0 to 5 score scale.
+- For the Final Review, score the completed project after testing, security hardening, maintainability cleanup, and the change request.
+- For the Testing Evidence column, score implemented automated tests, manual checks, cleanup of test data, and reported test results.
+
+Use this exact matrix structure:
+
+| Feature / Area | Functionality 0-5 | Data Persistence 0-5 | Backend Security / Role Control 0-5 | Validation / Error Handling 0-5 | Testing Evidence 0-5 | Maintainability 0-5 | UI / Manual Usability 0-5 | Evidence | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Project setup and run commands |  |  |  |  |  |  |  |  |  |
+| Database setup and starter data |  |  |  |  |  |  |  |  |  |
+| Login workflow |  |  |  |  |  |  |  |  |  |
+| Role-based access |  |  |  |  |  |  |  |  |  |
+| Main create action |  |  |  |  |  |  |  |  |  |
+| Main view/list action |  |  |  |  |  |  |  |  |  |
+| Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
+| Protected action |  |  |  |  |  |  |  |  |  |
+| Secondary feature |  |  |  |  |  |  |  |  |  |
+| UI/manual usability |  |  |  |  |  |  |  |  |  |
+| Security posture |  |  |  |  |  |  |  |  |  |
+| Testing evidence |  |  |  |  |  |  |  |  |  |
+| Maintainability |  |  |  |  |  |  |  |  |  |
 
 Output:
 1. Final feature summary
-2. Project structure and run commands
-3. Frontend/backend separation check
-4. Database setup and table summary
-5. Login and role/access explanation
-6. Protected action explanation
-7. Validation summary
-8. Automated and manual testing summary
-9. Stage 11 change summary
-10. Stage drift or early work
-11. Security risks and exposed-secret check
-12. Documentation/code mismatches
-13. Known limitations
-14. Demo script
-15. Suggested viva questions
+2. Review scoring matrix
+3. Project structure and run commands
+4. Frontend/backend separation check
+5. Database setup and table summary
+6. Login and role/access explanation
+7. Protected action explanation
+8. Validation summary
+9. Automated and manual testing summary
+10. Stage 11 change summary
+11. Stage drift or early work
+12. Security risks and exposed-secret check
+13. Documentation/code mismatches
+14. Known limitations
+15. Demo script
+16. Suggested viva questions
 ```
 ## Reusable Quality Recovery Prompt
 
