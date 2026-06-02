@@ -2,109 +2,89 @@
 
 ## Purpose
 
-This document lists the minimum knowledge we assume all participants may already have before the workshop starts, including Participant 1.
+This document lists the minimum knowledge assumptions made about all workshop participants, including Participant 1.
 
-These are hypotheses, not guaranteed skills. If a participant struggles with one of these areas, facilitators should record it because it affects how we interpret the workshop results.
+These are hypotheses about the individuals represented in the workshop. They are not guaranteed skills and they are not the same as software engineering competence.
 
-The purpose is to separate AI-coding failure from basic setup or technical-background failure.
+Participant 1 is still treated as AI-dependent during the workshop. However, we assume even Participant 1 has enough basic tool and setup awareness to take part in the activity.
 
-These assumptions are not the same as software engineering skill. Participant 1 is still treated as AI-dependent during the workshop, but we assume even Participant 1 has enough basic tool and setup awareness to take part in the activity.
+The purpose of these hypotheses is to separate AI-use behaviour from basic environment or prerequisite-knowledge problems.
 
-## Main Hypothesis
+## General Hypothesis
 
-All participants are expected to have enough basic technical awareness to copy prompts into Antigravity IDE's AI chat/agent, run the generated PERN project locally, and understand the basic difference between frontend, backend, and database responsibilities.
+All participants are assumed to have enough basic technical awareness to copy prompts into Antigravity IDE's AI chat/agent, run the generated project locally, and understand that the application has a frontend, backend, and database.
 
-If this assumption is false, the participant may fail because of environment or concept gaps rather than because of their AI-use style.
+## Tool And Setup Hypotheses
 
-## Setup Knowledge Hypotheses
+- Participants can open and use Antigravity IDE.
+- Participants can use Antigravity IDE's AI chat/agent.
+- Participants can create or open a project folder.
+- Participants can view and navigate generated project files.
+- Participants can use the built-in terminal or an external terminal.
+- Participants can run basic npm commands when instructed.
+- Participants understand that local applications usually run through localhost URLs.
+- Participants understand that the frontend and backend may need to run as separate local services.
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants can open and use Antigravity IDE. | The whole workshop happens inside Antigravity IDE. | Can open a folder, view files, and use the terminal. |
-| Participants can use Antigravity IDE's AI chat/agent. | Prompts must be pasted into the AI chat/agent. | Can open the AI panel and submit a prompt. |
-| Participants can create or open a project folder. | Each implementation must be separate. | Can choose where the AI-generated project should be created. |
-| Participants can run basic terminal commands. | React and Express projects need install and run commands. | Can run `npm install`, `npm run dev`, or similar commands when instructed. |
-| Participants understand localhost URLs. | They need to open the frontend and backend locally. | Can open a local app URL in the browser. |
+## Stack Hypotheses
 
-## Stack Knowledge Hypotheses
+- Participants have a basic awareness that PERN means PostgreSQL, Express, React, and Node.js.
+- Participants understand that React is used for the frontend interface.
+- Participants understand that Node.js and Express are used for the backend API.
+- Participants understand that PostgreSQL is used for database storage.
+- Participants understand that Supabase is used as the managed PostgreSQL database provider.
+- Participants understand that the workshop uses React, Express, and Supabase PostgreSQL for every project.
+- Participants understand that the stack should not be changed during the workshop.
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants know that PERN means PostgreSQL, Express, React, and Node.js. | The workshop fixes the stack to keep comparison fair. | Can identify which part is database, backend, frontend, and runtime. |
-| Participants know React is the frontend. | UI work should happen in the React app. | Can identify the frontend folder and browser-facing code. |
-| Participants know Express/Node.js is the backend. | Database access and protected actions should go through the backend. | Can identify backend routes or API files. |
-| Participants know PostgreSQL is the database. | Project data must persist in a real database. | Can explain that saved records should remain after refresh. |
-| Participants know Supabase is being used as managed PostgreSQL. | Supabase is the database provider, not a reason to bypass Express. | Can distinguish Supabase dashboard/database from the React frontend. |
+## Supabase And Database Hypotheses
 
-## Supabase Knowledge Hypotheses
+- Participants can access a Supabase account or supplied Supabase project.
+- Participants understand that a Supabase database connection string is needed for the backend.
+- Participants understand that the database password is sensitive.
+- Participants understand that database credentials should not be exposed in React/frontend code.
+- Participants understand that tables must exist before records can be saved.
+- Participants understand that saved records should remain after refreshing the browser.
+- Participants understand that starter or demo records may be needed to test the application.
+- Participants understand that test/demo data should not be allowed to permanently pollute the database.
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants can log in to Supabase. | They need access to the supplied project/database. | Can open the Supabase dashboard. |
-| Participants know where the Supabase database connection string is used. | The connection string should be used by the Express backend. | Can identify that it belongs in backend `.env`, not React code. |
-| Participants know the database password is sensitive. | Secrets must not be exposed in frontend code, screenshots, or reports. | Can avoid pasting the password into public-facing files. |
-| Participants understand that tables must exist before data can save. | Many AI-generated apps fail because tables are missing. | Can check whether setup or seed commands create tables. |
-| Participants understand seed/demo records. | The app needs usable demo data during testing. | Can run or identify a setup/seed command. |
+## Architecture Hypotheses
 
-## Application Architecture Hypotheses
+- Participants understand that the frontend, backend, and database have different responsibilities.
+- Participants understand that React should call Express API routes.
+- Participants understand that Express should communicate with Supabase PostgreSQL.
+- Participants understand that a React-only app using browser memory is not equivalent to a database-backed application.
+- Participants understand that secrets belong in backend environment configuration, not public frontend files.
+- Participants understand that generated folders, configuration files, and run commands are part of the evidence needed to judge the project.
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants understand frontend and backend as separate services. | React and Express usually run separately during development. | Can run both parts and explain which URL is which. |
-| Participants understand React should call Express API routes. | Direct database access from React weakens the comparison and security model. | Can identify API calls from React to backend endpoints. |
-| Participants understand Express should handle database access. | Authentication, authorization, validation, and database rules need backend control. | Can identify database queries in backend code. |
-| Participants understand environment variables. | Database URLs and passwords should be configured outside source code. | Can locate `.env` or `.env.example` without exposing secrets. |
+## Authentication And Security Hypotheses
 
-## Security And Access Hypotheses
-
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants know login is different from selecting a role in the UI. | A role dropdown alone is not real access control. | Can explain how a user identity is decided. |
-| Participants know protected actions must be checked by the backend. | UI-only restrictions can be bypassed. | Can identify backend role checks for the protected action. |
-| Participants know users should not access records they are not allowed to see. | Ownership and role rules are part of SDP quality. | Can explain which role can see or change which records. |
-| Participants know validation should happen before saving bad data. | AI-generated apps often accept invalid or incomplete input. | Can test empty or invalid form input. |
+- Participants understand that login is different from simply selecting a role in the UI.
+- Participants understand that different user roles should have different allowed actions.
+- Participants understand that protected actions should be checked by the backend.
+- Participants understand that UI-only restrictions can be bypassed.
+- Participants understand that users should not be able to access or change records they are not allowed to use.
+- Participants understand that invalid or incomplete input should not be saved without validation.
+- Participants understand that database passwords and other secrets should not appear in shared reports or screenshots.
 
 ## Testing And Review Hypotheses
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants know the difference between manual checking and automated testing. | The review matrix separates working UI from test evidence. | Can identify whether a test command exists. |
-| Participants understand test data should be cleaned up. | Tests using the real Supabase database should not pollute workshop data. | Can find cleanup logic or a cleanup instruction. |
-| Participants can read a generated review report. | Mid and Final Review reports are key comparison evidence. | Can locate `MID_REVIEW.md` and `FINAL_REVIEW.md` if generated. |
-| Participants can compare evidence, not only appearance. | A polished UI can still hide weak security or persistence. | Can use the scoring matrix to discuss quality. |
+- Participants understand the basic difference between manually trying the app and running automated tests.
+- Participants understand that a visible UI does not prove that persistence, security, or role control works.
+- Participants understand that test evidence is part of project quality.
+- Participants understand that Mid Review and Final Review files are evidence generated for comparison.
+- Participants understand that the review scoring matrix is used to compare outputs, not to help the AI build new features during the review stage.
+- Participants understand that review stages should not modify the application.
 
 ## AI-Use Hypotheses
 
-| Hypothesis | Why It Matters | How To Check |
-|---|---|---|
-| Participants can copy and paste prompts exactly. | The workshop depends on controlled prompt differences. | Can use the assigned prompt pack without rewriting it. |
-| Participants understand that prompts must be used in order. | Stage drift affects comparability. | Can wait until the facilitator reaches each stage. |
-| Participants can recognize when AI starts doing future work early. | Early implementation can distort stage-based comparison. | Can flag if testing, security, or change-request work appears too early. |
-| Participants can use the reusable failure prompt when output is wrong. | This keeps the workshop moving without extra technical coaching. | Can paste the recovery prompt when the AI output fails. |
+- Participants can copy and paste the assigned prompts without rewriting them.
+- Participants understand that prompts should be used in the given order.
+- Participants understand that the facilitator controls when the next stage begins.
+- Participants understand that if the AI starts doing later-stage work early, this should be treated as stage drift.
+- Participants understand that the reusable failure prompt is used when the AI output is wrong, incomplete, unsafe, or outside the selected case.
+- Participants understand that accepting AI output without checking it may affect the quality of the final project.
 
-## Risks If These Hypotheses Are False
+## Interpretation Hypothesis
 
-If several participants do not meet these assumptions, the workshop may show environment readiness gaps instead of AI-development quality gaps.
+If these assumptions hold, differences between Participant 1, Participant 2, and Participant 3 are more likely to reflect AI-use style, software engineering awareness, and prompt quality.
 
-Possible effects:
-
-- Participant 1 may fail at setup before meaningful AI-dependency behaviour is visible.
-- Participant 2 may not understand the SE terms inside the prompt pack.
-- Participant 3 may not benefit from the stronger prompt structure if they cannot inspect the output.
-- The comparison may become unfair if one participant receives extra setup help and another does not.
-- Staff may misinterpret missing Supabase setup as an AI failure rather than a basic database readiness issue.
-
-## Facilitator Use
-
-Before the build starts, facilitators should quickly confirm:
-
-- Antigravity IDE and AI chat/agent access.
-- Node.js and npm availability.
-- Supabase account access.
-- Supabase database connection string and password availability.
-- Basic understanding of React frontend, Express backend, and Supabase PostgreSQL database.
-- Understanding that database credentials must not be placed in React code or shared publicly.
-
-During the workshop, facilitators should record which assumptions were true or false for each participant group.
-
-This helps explain whether the final result reflects AI-use style, software engineering understanding, prompt quality, or missing prerequisite knowledge.
+If these assumptions do not hold, the workshop result may also reflect missing prerequisite knowledge, tool-readiness problems, or environment setup issues.
