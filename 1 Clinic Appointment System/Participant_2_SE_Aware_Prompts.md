@@ -28,30 +28,33 @@ Summarize Clinic Appointment System: roles receptionist and doctor, main entity 
 List requirements for Clinic Appointment System: appointment create/view/update/cancel workflow, roles, validation, login, protected action add/edit visit notes, and basic automated tests. Do not create application code yet.
 ```
 
-### Stage 2: PERN Structure
+### Stage 2: React/Express/MySQL Structure
 
 ```text
-Create PERN project structure: React frontend, Express backend, Supabase PostgreSQL, env setup, routes, pages, and run steps. Scaffold only. Do not implement the full business workflow yet.
+Create React, Express, Node.js, and MySQL project structure: React frontend, Express backend, local MySQL, env setup, routes, pages, and run steps. Scaffold only. Do not implement the full business workflow yet.
 ```
 
 ### Stage 3: Data Model
 
 ```text
-Design Supabase table for appointment using patientName, patientPhone, doctorName, date, time, reason, status, visitNote, initial status values booked, completed, cancelled, required fields, and role fields.
+Design MySQL table for appointment using patientName, patientPhone, doctorName, date, time, reason, status, visitNote, initial status values booked, completed, cancelled, required fields, and role fields.
 
-Use this Supabase PostgreSQL database information:
-DATABASE_URL: [SUPABASE_DATABASE_URL]
-Database password: [SUPABASE_DATABASE_PASSWORD]
+Use these local MySQL details and put them only in the backend .env file:
+DB_HOST=[MYSQL_HOST]
+DB_PORT=[MYSQL_PORT]
+DB_USER=[MYSQL_USER]
+DB_PASSWORD=[MYSQL_PASSWORD]
+DB_NAME=[MYSQL_DATABASE]
 
 Requirements:
-- Use the Express backend with pg and DATABASE_URL for database access.
-- Do not use Supabase URL/key style configuration for database queries.
+- Use the Express backend with mysql2/promise and DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for database access.
+- Do not use a single database URL or API-key style configuration for database queries.
 - Put secrets only in backend .env; never expose them in React.
 - Create a repeatable database setup script, for example npm run db:setup.
 - Create safe seed data for the workshop.
 - Create a login/users table for the two roles.
 - Do not rely on hard-coded frontend-only accounts.
-- Use clearly labelled test records in the same Supabase database and clean them up after tests.
+- Use clearly labelled test records in the same local MySQL database and clean them up after tests.
 - Do not drop existing tables unless the command is clearly named as a demo reset command.
 - Do not implement UI features in this stage.
 ```
@@ -65,7 +68,7 @@ Create UI workflow for receptionist and doctor: pages, forms, list, filters, rol
 ### Stage 5: Main Feature
 
 ```text
-Implement appointment create, view, update and cancel with React pages, Express routes, Supabase queries, validation, and errors.
+Implement appointment create, view, update and cancel with React pages, Express routes, MySQL queries, validation, and errors.
 ```
 
 ### Stage 6: Authentication And Authorization
@@ -102,13 +105,18 @@ Case details:
 - Secondary feature: filter appointments by doctor, date or status
 - Protected action: add or edit visit notes
 
+Case-specific review focus:
+- appointment date/time and doctor assignment
+- appointment status and cancellation flow
+- visit note privacy and doctor-only editing
+
 Review the project as it currently exists after the secondary feature stage and before testing, security hardening, and maintainability cleanup.
 
 Check:
 - Whether the app appears runnable.
 - Whether React frontend and Express backend are separated.
-- Whether React calls Express routes instead of Supabase directly.
-- Whether Supabase uses DATABASE_URL in the backend without exposing secrets in React.
+- Whether React calls Express routes and never connects to MySQL directly.
+- Whether the backend uses DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for MySQL without exposing secrets in React.
 - Whether the needed database tables appear to exist, including whether a users/login table exists.
 - Whether there is a repeatable database setup or seed command.
 - Whether login is database-backed, mock-only, role-selector-only, or missing.
@@ -131,7 +139,7 @@ Score meaning:
 - 2 = partially working with major gaps
 - 3 = mostly working with important gaps
 - 4 = working with minor gaps
-- 5 = complete for workshop scope
+- 5 = complete for the selected case scope
 
 For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
 
@@ -148,6 +156,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: appointment date/time and doctor assignment |  |  |  |  |  |  |  |  |  |
+| Case-specific: appointment status and cancellation flow |  |  |  |  |  |  |  |  |  |
+| Case-specific: visit note privacy and doctor-only editing |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -171,7 +182,7 @@ Save the review in MID_REVIEW.md with:
 
 ```text
 Create automated backend tests and a test command for appointment create/view/update/cancel workflow, validation, login, roles, visit notes, and appointment filtering.
-Use clearly labelled test records in the same Supabase database and clean them up after tests.
+Use clearly labelled test records in the same local MySQL database and clean them up after tests.
 Add manual checks only as a supplement. Include a check that direct role/owner spoofing from browser headers, request body, or query parameters is rejected.
 ```
 
@@ -200,6 +211,11 @@ Apply change request: appointments start as pending, doctors can accept or rejec
 ```text
 Prepare a final evidence-based review for Clinic Appointment System.
 
+Case-specific review focus:
+- appointment date/time and doctor assignment
+- appointment status and cancellation flow
+- visit note privacy and doctor-only editing
+
 Instructions:
 - This is review only.
 - Do not modify application source code, database schema, seed data, package files, or configuration.
@@ -210,8 +226,8 @@ Instructions:
 - Explain the main workflow end to end.
 - List the final project structure.
 - Explain whether React and Express are separated.
-- Explain whether React calls Express, not Supabase directly.
-- Explain the database connection method. Say whether DATABASE_URL is configured, but do not print the password.
+- Explain whether React calls Express routes and never connects to MySQL directly.
+- Explain the database connection method. Say whether DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME are configured, but do not print the password.
 - List the database tables used and whether a users/login table exists.
 - Explain how tables and seed data are created again if needed.
 - Explain how test data is created and cleaned up.
@@ -246,6 +262,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: appointment date/time and doctor assignment |  |  |  |  |  |  |  |  |  |
+| Case-specific: appointment status and cancellation flow |  |  |  |  |  |  |  |  |  |
+| Case-specific: visit note privacy and doctor-only editing |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -274,12 +293,12 @@ Output:
 Use this at any stage when the AI output is incomplete, incorrect, too broad, or not aligned with the selected case.
 
 ```text
-Revise for Clinic Appointment System. Keep PERN, small scope, receptionist, doctor, appointment, validation, backend role access, database-backed login, visit note protection, filtering, automated checks, and fix the issue. Do only the current stage.
+Revise for Clinic Appointment System. Keep React, Express, Node.js, and MySQL, small scope, receptionist, doctor, appointment, validation, backend role access, database-backed login, visit note protection, filtering, automated checks, and fix the issue. Do only the current stage.
 ```
 ## Error Prompt
 
 Use this when the app fails. Paste the actual error message after the prompt.
 
 ```text
-Fix this PERN app error. Keep React, Express, and Supabase. Explain the cause briefly and show the changed files:
+Fix this React, Express, Node.js, and MySQL app error. Keep React, Express, Node.js, and MySQL. Explain the cause briefly and show the changed files:
 ```

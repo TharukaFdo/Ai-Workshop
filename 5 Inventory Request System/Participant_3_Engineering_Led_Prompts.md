@@ -10,7 +10,7 @@ Review the AI output before accepting it.
 
 Reject output that:
 
-- Changes the required PERN/Supabase stack.
+- Changes the required React/Express/Node/MySQL stack.
 - Bypasses the Express backend.
 - Ignores role restrictions.
 - Skips backend validation.
@@ -18,7 +18,7 @@ Reject output that:
 - Rewrites the whole project unnecessarily.
 - Stores secrets in frontend code.
 - Uses client-supplied role or owner headers as authorization proof.
-- Leaves unused Supabase SDK config or dependencies.
+- Leaves unused database client config or dependencies.
 
 You may keep instruction `.md` files in the project codebase when the prompts ask for them.
 
@@ -27,10 +27,10 @@ You may keep instruction `.md` files in the project codebase when the prompts as
 These rules are already included across the stage prompts. If the AI drifts, paste the relevant rule again.
 
 ```text
-Use React for the frontend, Node.js/Express for the backend, and Supabase PostgreSQL for the database.
-React must call Express API routes. Express must handle Supabase database access.
-Do not build a Supabase-only React app.
-Use direct PostgreSQL access from Express with pg; do not add unused Supabase SDK clients/config.
+Use React for the frontend, Node.js/Express for the backend, and a local MySQL database.
+React must call Express API routes. Express must handle local MySQL database access.
+Do not put MySQL access or MySQL credentials in React.
+Use MySQL access from Express with mysql2/promise; do not add unused database clients or config.
 If frontend environment variables are needed, use only a non-secret API URL such as VITE_API_URL.
 Keep the project small and focused on the selected case.
 Do not add features outside the client case unless the prompt asks for them.
@@ -44,18 +44,18 @@ After changing files, list the files changed and how to run or check the result.
 ### Stage 0: Case Scope, Assumptions, And Working Notes
 
 ```text
-You are helping build a workshop-limited PERN application.
+You are helping build a small but complete React, Express, Node.js, and MySQL application.
 
 Selected case:
 Inventory Request System
 
 Client explanation:
-We need a simple internal system where staff can request inventory items and storekeepers can manage those requests. A staff member should be able to submit a request with item name, quantity, reason, requested date, and their name, then check whether the request is pending, approved, rejected, or issued. A storekeeper should be able to review all requests, approve or reject them, add a note, and mark approved items as issued. It would also help if requests could be filtered by item name, requester, or status. Staff should not be able to approve or issue their own requests, and they should not edit storekeeper notes. This should be a small web prototype using React, Node.js/Express, and Supabase PostgreSQL.
+We need a simple internal system where staff can request inventory items and storekeepers can manage those requests. A staff member should be able to submit a request with item name, quantity, reason, requested date, and their name, then check whether the request is pending, approved, rejected, or issued. A storekeeper should be able to review all requests, approve or reject them, add a note, and mark approved items as issued. It would also help if requests could be filtered by item name, requester, or status. Staff should not be able to approve or issue their own requests, and they should not edit storekeeper notes. This should be a small web prototype using React, Node.js/Express, and local MySQL.
 
 Required stack:
 - Frontend: React
 - Backend: Node.js with Express
-- Database: Supabase PostgreSQL
+- Database: local MySQL
 
 Roles:
 - Staff member
@@ -104,7 +104,7 @@ Case details:
 - Secondary feature: filter requests by item name, requester or status
 - Protected action: approve or reject requests, mark items issued, and edit storekeeper notes
 - Validation expectations: item name, quantity, reason, requested date and requester name are required; quantity must be positive; status must use valid values
-- Security concerns: staff must not approve or issue their own requests; staff must not edit storekeeper notes; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
+- Security concerns: staff must not approve or issue their own requests; staff must not edit storekeeper notes; users must not access actions outside their role; MySQL database credentials must not be exposed in frontend code
 - Out of scope: stock level management, purchasing, supplier management, barcode scanning, warehouse transfers
 
 Instructions:
@@ -116,7 +116,7 @@ Instructions:
 - Define validation rules.
 - Define failure cases.
 - Define minimum automated tests and any manual checks.
-- Keep the scope suitable for a one-day workshop.
+- Keep the scope focused on the selected case and required features.
 - Do not write application code yet.
 
 Output:
@@ -128,17 +128,17 @@ Output:
 6. Minimum verification checklist
 ```
 
-### Stage 2: PERN Architecture Backbone And Project Scaffold
+### Stage 2: React/Express/MySQL Architecture Backbone And Project Scaffold
 
 ```text
-Inspect the current codebase, then create or update the PERN project backbone for Inventory Request System.
+Inspect the current codebase, then create or update the React, Express, Node.js, and MySQL project backbone for Inventory Request System.
 
 Required architecture:
 - React frontend
 - Node.js/Express backend
-- Supabase PostgreSQL database
+- local MySQL database
 - React calls Express API routes
-- Express handles all Supabase access
+- Express handles all MySQL database access
 
 Instructions:
 - If the project is empty, scaffold a simple frontend and backend.
@@ -147,7 +147,7 @@ Instructions:
 - Add .env.example files without real secrets.
 - Add package scripts to run frontend and backend. If a root package.json is created, its scripts must delegate to real frontend/backend commands; do not leave placeholder scripts that fail.
 - Add a README.md with setup and run steps.
-- Prepare a placeholder for DATABASE_URL in backend .env.example.
+- Prepare placeholders for DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME in backend .env.example.
 - Do not implement all business features yet.
 - Do not implement login, full CRUD, or secondary features in this stage.
 - Do not add unrelated frameworks.
@@ -171,7 +171,7 @@ Output:
 6. Known setup risks
 ```
 
-### Stage 3: Supabase Data Model And Database Access
+### Stage 3: MySQL Data Model And Database Access
 
 ```text
 Implement the database model and data access layer for Inventory Request System.
@@ -188,15 +188,18 @@ pending, approved, rejected, issued
 Roles:
 Staff member, Storekeeper
 
-Supabase PostgreSQL connection information to use:
-DATABASE_URL: [SUPABASE_DATABASE_URL]
-Database password: [SUPABASE_DATABASE_PASSWORD]
+Use these local MySQL details and put them only in the backend .env file:
+DB_HOST=[MYSQL_HOST]
+DB_PORT=[MYSQL_PORT]
+DB_USER=[MYSQL_USER]
+DB_PASSWORD=[MYSQL_PASSWORD]
+DB_NAME=[MYSQL_DATABASE]
 
 Instructions:
-- Use direct PostgreSQL access from the Express backend with pg and DATABASE_URL.
-- Do not use Supabase URL/key style configuration for database queries. Do not install or scaffold @supabase/supabase-js for this workshop unless it is actively used; prefer pg only and remove unused SDK config.
-- Put DATABASE_URL only in backend .env files. Never expose database credentials in React. If the frontend needs an environment variable, use only a non-secret API base URL such as VITE_API_URL.
-- Create SQL for the Supabase PostgreSQL table or tables needed for the workshop slice.
+- Use direct MySQL access from the Express backend with mysql2/promise and DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME.
+- Do not use a single database URL or API-key style configuration for database queries. Do not install or scaffold unused database SDK packages; use mysql2/promise for MySQL and remove unused database config.
+- Put DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME only in backend .env files. Never expose database credentials in React. If the frontend needs an environment variable, use only a non-secret API base URL such as VITE_API_URL.
+- Create SQL for the local MySQL table or tables needed for the workshop slice.
 - Include a database-backed prototype login table, for example app_users, with role and ownership/identity fields for the two roles.
 - Include primary keys, required fields, status constraints, timestamps, and ownership/access fields where needed.
 - Add backend database configuration using environment variables.
@@ -206,7 +209,7 @@ Instructions:
 - Add example seed data, including demo users for the two roles.
 - Add a repeatable non-destructive database setup script, for example npm run db:setup.
 - Add a clearly labelled demo reset script only if reset is needed.
-- Plan for automated tests to create clearly labelled test records in the same Supabase database and clean them up.
+- Plan for automated tests to create clearly labelled test records in the same local MySQL database and clean them up.
 - Do not use fake, browser-only, or in-memory storage.
 - Do not implement UI features in this stage.
 - Update README.md or docs with database setup steps.
@@ -272,12 +275,12 @@ Inventory Request
 Required stack:
 - React frontend
 - Express API
-- Supabase PostgreSQL
+- local MySQL
 
 Instructions:
 - Implement the case workflow actions for Inventory Request, including create, read, update, and status/lifecycle actions where appropriate.
 - Add Express routes for the core workflow.
-- Connect routes to Supabase through backend service functions.
+- Connect routes to MySQL through backend service functions.
 - Connect React screens to Express API routes.
 - Add backend validation for required fields and status values.
 - Add user-friendly frontend error messages.
@@ -382,13 +385,18 @@ Case details:
 - Secondary feature: filter requests by item name, requester or status
 - Protected action: approve or reject requests, mark items issued, and edit storekeeper notes
 
+Case-specific review focus:
+- item, quantity, reason, and requester fields
+- approve/reject/issued status lifecycle
+- storekeeper note protection and staff ownership
+
 Review the project as it currently exists after the secondary feature stage and before testing, security hardening, and maintainability cleanup.
 
 Check:
 - Whether the app appears runnable.
 - Whether React frontend and Express backend are separated.
-- Whether React calls Express routes instead of Supabase directly.
-- Whether Supabase uses DATABASE_URL in the backend without exposing secrets in React.
+- Whether React calls Express routes and never connects to MySQL directly.
+- Whether the backend uses DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for MySQL without exposing secrets in React.
 - Whether the needed database tables appear to exist, including whether a users/login table exists.
 - Whether there is a repeatable database setup or seed command.
 - Whether login is database-backed, mock-only, role-selector-only, or missing.
@@ -411,7 +419,7 @@ Score meaning:
 - 2 = partially working with major gaps
 - 3 = mostly working with important gaps
 - 4 = working with minor gaps
-- 5 = complete for workshop scope
+- 5 = complete for the selected case scope
 
 For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
 
@@ -428,6 +436,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: item, quantity, reason, and requester fields |  |  |  |  |  |  |  |  |  |
+| Case-specific: approve/reject/issued status lifecycle |  |  |  |  |  |  |  |  |  |
+| Case-specific: storekeeper note protection and staff ownership |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -454,7 +465,7 @@ Add practical verification for Inventory Request System.
 
 Instructions:
 - Add lightweight automated tests and expose them through a clear command, for example npm test. If a root package exists, root npm test must run the backend tests or README must clearly direct the exact backend test command; do not leave a failing placeholder test script.
-- Use clearly labelled test records in the same Supabase database and clean them up after tests.
+- Use clearly labelled test records in the same local MySQL database and clean them up after tests.
 - Do not rely only on manual checks.
 - Cover the main workflow.
 - Cover create, view, update, and status/lifecycle actions where implemented.
@@ -486,7 +497,7 @@ Output:
 Review and improve security and validation for Inventory Request System.
 
 Known security concerns:
-staff must not approve or issue their own requests; staff must not edit storekeeper notes; users must not access actions outside their role; Supabase service keys must not be exposed in frontend code
+staff must not approve or issue their own requests; staff must not edit storekeeper notes; users must not access actions outside their role; MySQL database credentials must not be exposed in frontend code
 
 Validation expectations:
 item name, quantity, reason, requested date and requester name are required; quantity must be positive; status must use valid values
@@ -500,9 +511,9 @@ Instructions:
 - Ensure users cannot access records outside their allowed role/identity.
 - Ensure fake/in-memory storage is not masking database failures.
 - Ensure frontend secrets are not exposed.
-- Ensure Supabase service keys are not used in frontend code.
+- Ensure MySQL database credentials are not used in frontend code.
 - Ensure API errors do not expose sensitive details.
-- Remove unused Supabase SDK clients/config if the project uses pg with DATABASE_URL.
+- Remove unused database clients/config if the project uses mysql2/promise with DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME.
 - Apply focused fixes only.
 - Update docs/TEST_PLAN.md or tests with any new checks.
 - After editing, list all files created or changed.
@@ -576,6 +587,11 @@ Output:
 ```text
 Prepare a final evidence-based review for Inventory Request System.
 
+Case-specific review focus:
+- item, quantity, reason, and requester fields
+- approve/reject/issued status lifecycle
+- storekeeper note protection and staff ownership
+
 Instructions:
 - This is review only.
 - Do not modify application source code, database schema, seed data, package files, or configuration.
@@ -586,8 +602,8 @@ Instructions:
 - Explain the main workflow end to end.
 - List the final project structure.
 - Explain whether React and Express are separated.
-- Explain whether React calls Express, not Supabase directly.
-- Explain the database connection method. Say whether DATABASE_URL is configured, but do not print the password.
+- Explain whether React calls Express routes and never connects to MySQL directly.
+- Explain the database connection method. Say whether DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME are configured, but do not print the password.
 - List the database tables used and whether a users/login table exists.
 - Explain how tables and seed data are created again if needed.
 - Explain how test data is created and cleaned up.
@@ -622,6 +638,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: item, quantity, reason, and requester fields |  |  |  |  |  |  |  |  |  |
+| Case-specific: approve/reject/issued status lifecycle |  |  |  |  |  |  |  |  |  |
+| Case-specific: storekeeper note protection and staff ownership |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -653,15 +672,15 @@ Use this at any stage when the AI response is incomplete, incorrect, too broad, 
 Revise the previous response for Inventory Request System.
 
 Keep these constraints:
-- React frontend, Express backend, Supabase PostgreSQL database.
+- React frontend, Express backend, local MySQL database.
 - React must call Express API routes.
-- Express must handle Supabase access.
-- Do not build a Supabase-only React app.
-- Keep the scope limited to the selected case.
+- Express must handle MySQL database access.
+- Do not put MySQL access or MySQL credentials in React.
+- Keep the scope focused on the selected case.
 - Include Staff member, Storekeeper, Inventory Request, inventory request submission, approval/rejection and issue workflow, filter requests by item name, requester or status, and approve or reject requests, mark items issued, and edit storekeeper notes.
 - Enforce role access in the backend, not only the UI.
 - Use database-backed prototype login, not frontend-only hard-coded accounts.
-- Use real Supabase PostgreSQL through Express, not fake/in-memory storage.
+- Use real local MySQL through Express, not fake/in-memory storage.
 - Include backend validation for required fields and status values.
 - Include automated verification where practical.
 - Do only the current stage.
@@ -680,7 +699,7 @@ Use this when the app fails.
 The app failed with this error:
 
 Context:
-This is Inventory Request System, a PERN app using React, Node.js/Express, and Supabase PostgreSQL.
+This is Inventory Request System, a React, Express, Node.js, and MySQL app using React, Node.js/Express, and local MySQL.
 
 Rules:
 - Do not change the stack.

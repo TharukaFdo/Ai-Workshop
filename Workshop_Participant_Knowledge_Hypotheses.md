@@ -27,19 +27,19 @@ All participants are assumed to have enough basic technical awareness to copy pr
 
 ## Stack Hypotheses
 
-- Participants have a basic awareness that PERN means PostgreSQL, Express, React, and Node.js.
+- Participants have a basic awareness that the workshop stack means React, Node.js/Express, and local MySQL.
 - Participants understand that React is used for the frontend interface.
 - Participants understand that Node.js and Express are used for the backend API.
-- Participants understand that PostgreSQL is used for database storage.
-- Participants understand that Supabase is used as the managed PostgreSQL database provider.
-- Participants understand that the workshop uses React, Express, and Supabase PostgreSQL for every project.
+- Participants understand that MySQL is used for database storage.
+- Participants understand that MySQL is used as a locally running database.
+- Participants understand that the workshop uses React, Express, and local MySQL for every project.
 - Participants understand that the stack should not be changed during the workshop.
 
-## Supabase And Database Hypotheses
+## MySQL And Database Hypotheses
 
-- Participants can access a Supabase account or supplied Supabase project.
-- Participants understand that a Supabase database connection string is needed for the backend.
-- Participants understand that the database password is sensitive.
+- Participants can access a local MySQL server or supplied local MySQL database.
+- Participants understand that MySQL host, port, user, password, and database name are needed for the backend.
+- Participants understand that the MySQL password is sensitive.
 - Participants understand that database credentials should not be exposed in React/frontend code.
 - Participants understand that tables must exist before records can be saved.
 - Participants understand that saved records should remain after refreshing the browser.
@@ -50,7 +50,7 @@ All participants are assumed to have enough basic technical awareness to copy pr
 
 - Participants understand that the frontend, backend, and database have different responsibilities.
 - Participants understand that React should call Express API routes.
-- Participants understand that Express should communicate with Supabase PostgreSQL.
+- Participants understand that Express should communicate with local MySQL.
 - Participants understand that a React-only app using browser memory is not equivalent to a database-backed application.
 - Participants understand that secrets belong in backend environment configuration, not public frontend files.
 - Participants understand that generated folders, configuration files, and run commands are part of the evidence needed to judge the project.
@@ -63,7 +63,7 @@ All participants are assumed to have enough basic technical awareness to copy pr
 - Participants understand that UI-only restrictions can be bypassed.
 - Participants understand that users should not be able to access or change records they are not allowed to use.
 - Participants understand that invalid or incomplete input should not be saved without validation.
-- Participants understand that database passwords and other secrets should not appear in shared reports or screenshots.
+- Participants understand that MySQL passwords and other secrets should not appear in shared reports or screenshots.
 
 ## Testing And Review Hypotheses
 

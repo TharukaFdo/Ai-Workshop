@@ -35,13 +35,16 @@ Set up the project files so I can run the app. Only create the basic React front
 ### Stage 3: Save The Main Thing
 
 ```text
-Make maintenance requests save in Supabase and show again even after refresh.
+Make maintenance requests save in MySQL and show again even after refresh.
 
-Use these Supabase PostgreSQL database details:
-DATABASE_URL: [SUPABASE_DATABASE_URL]
-Database password: [SUPABASE_DATABASE_PASSWORD]
+Use these local MySQL details and put them only in the backend .env file:
+DB_HOST=[MYSQL_HOST]
+DB_PORT=[MYSQL_PORT]
+DB_USER=[MYSQL_USER]
+DB_PASSWORD=[MYSQL_PASSWORD]
+DB_NAME=[MYSQL_DATABASE]
 
-Keep the database password out of React or browser code.
+Keep the MySQL password out of React or browser code.
 Add an easy command I can run if the demo data needs to be prepared again.
 Do not use temporary browser storage or sample-only data.
 Only do this saving step.
@@ -63,7 +66,7 @@ Add creating, viewing, updating progress and closing maintenance requests.
 
 ```text
 Add login for requester and technician.
-Save login users in Supabase, not only inside React.
+Save login users in local MySQL, not only inside React.
 The server should decide what each logged-in person is allowed to do.
 Do not let the browser decide the role by itself.
 Only do this login step.
@@ -97,13 +100,18 @@ Case details:
 - Secondary feature: filter requests by location, priority or status
 - Protected action: add or edit technician notes and close requests
 
+Case-specific review focus:
+- location, priority, and problem details
+- technician notes and progress updates
+- request closure protection and requester visibility
+
 Review the project as it currently exists after the secondary feature stage and before testing, security hardening, and maintainability cleanup.
 
 Check:
 - Whether the app appears runnable.
 - Whether React frontend and Express backend are separated.
-- Whether React calls Express routes instead of Supabase directly.
-- Whether Supabase uses DATABASE_URL in the backend without exposing secrets in React.
+- Whether React calls Express routes and never connects to MySQL directly.
+- Whether the backend uses DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for MySQL without exposing secrets in React.
 - Whether the needed database tables appear to exist, including whether a users/login table exists.
 - Whether there is a repeatable database setup or seed command.
 - Whether login is database-backed, mock-only, role-selector-only, or missing.
@@ -126,7 +134,7 @@ Score meaning:
 - 2 = partially working with major gaps
 - 3 = mostly working with important gaps
 - 4 = working with minor gaps
-- 5 = complete for workshop scope
+- 5 = complete for the selected case scope
 
 For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
 
@@ -143,6 +151,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: location, priority, and problem details |  |  |  |  |  |  |  |  |  |
+| Case-specific: technician notes and progress updates |  |  |  |  |  |  |  |  |  |
+| Case-specific: request closure protection and requester visibility |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -167,7 +178,7 @@ Save the review in MID_REVIEW.md with:
 ```text
 Check if the app works and fix broken parts.
 Add a simple test command I can run.
-The test should check saving to Supabase, login, permissions, the main work, and the extra part.
+The test should check saving to local MySQL, login, permissions, the main work, and the extra part.
 Use test data and clean it up.
 ```
 
@@ -196,6 +207,11 @@ Change the app: high priority requests need an urgent flag and cannot be closed 
 ```text
 Prepare a final evidence-based review for Maintenance Request Tracker.
 
+Case-specific review focus:
+- location, priority, and problem details
+- technician notes and progress updates
+- request closure protection and requester visibility
+
 Instructions:
 - This is review only.
 - Do not modify application source code, database schema, seed data, package files, or configuration.
@@ -206,8 +222,8 @@ Instructions:
 - Explain the main workflow end to end.
 - List the final project structure.
 - Explain whether React and Express are separated.
-- Explain whether React calls Express, not Supabase directly.
-- Explain the database connection method. Say whether DATABASE_URL is configured, but do not print the password.
+- Explain whether React calls Express routes and never connects to MySQL directly.
+- Explain the database connection method. Say whether DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME are configured, but do not print the password.
 - List the database tables used and whether a users/login table exists.
 - Explain how tables and seed data are created again if needed.
 - Explain how test data is created and cleaned up.
@@ -242,6 +258,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: location, priority, and problem details |  |  |  |  |  |  |  |  |  |
+| Case-specific: technician notes and progress updates |  |  |  |  |  |  |  |  |  |
+| Case-specific: request closure protection and requester visibility |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -272,8 +291,8 @@ Use this at any stage when the AI output is wrong, too big, incomplete, broken, 
 ```text
 This is wrong. Make it match the maintenance request tracker app, keep it simple, and fix it.
 Do only the current stage.
-Keep React, Express, and Supabase.
-Do not save only in browser memory when Supabase is required.
+Keep React, Express, Node.js, and MySQL.
+Do not save only in browser memory when MySQL is required.
 Do not put database secrets in React.
 ```
 ## Error Prompt

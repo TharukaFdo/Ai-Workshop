@@ -33,23 +33,22 @@ The comparison is based on the development process, not only the final applicati
 All implementations must use the same stack:
 
 ```text
-Stack: PERN
+Stack: React, Express, Node.js, and MySQL
 Frontend: React
 Backend: Node.js with Express
-Database: PostgreSQL using Supabase
+Database: Local MySQL
 ```
 
-Supabase is used as the managed PostgreSQL database. The Express backend remains the API layer between React and the database.
+MySQL is used as the locally running database. The Express backend remains the API layer between React and the database.
 
 Required before the workshop:
 
 - Antigravity IDE installed and ready to use.
 - Antigravity IDE AI chat/agent access.
 - Node.js and npm.
-- Supabase account.
-- Supabase PostgreSQL connection string for each participant or group.
-- Supabase database password for the supplied connection string.
-- Clear test-data cleanup rule for automated tests using the same Supabase database.
+- Local MySQL server access.
+- MySQL host, port, user, password, and database name for each participant or group.
+- Clear test-data cleanup rule for automated tests using the same local MySQL database.
 - Ability to run a local React and Node.js/Express project.
 
 Participants should not switch to another stack during the workshop.
@@ -70,7 +69,7 @@ Minimum project scope:
 - One protected action.
 - One secondary feature.
 - Input validation.
-- Supabase PostgreSQL storage.
+- local MySQL storage.
 - Repeatable database setup or seed script.
 - Basic automated testing where practical.
 - Security review.
@@ -116,7 +115,7 @@ The Mid Review Stage is a review-only AI prompt used after Stage 7 and before St
 
 The Mid Review must include the shared review scoring matrix. The same matrix structure is used again in the Final Review so staff can compare the project before and after testing, security hardening, maintainability cleanup, and the change request.
 
-Each major feature or area is scored from 0 to 5 for functionality, data persistence, backend role/security control, validation/error handling, testing evidence, maintainability, and UI/manual usability. This allows staff to compare the three outputs without reading the full codebase first.
+Each major feature or area is scored from 0 to 5 for functionality, data persistence, backend role/security control, validation/error handling, testing evidence, maintainability, and UI/manual usability. Each case also includes case-specific review rows for its own business features, such as approval workflows, protected notes, attendance marking, borrowing/returning, filtering, or ownership rules. This allows staff to compare the three outputs without reading the full codebase first.
 
 Stage 11 should only be pasted when the facilitator reaches the change request checkpoint.
 
@@ -127,7 +126,7 @@ Stage 12 uses the same final review prompt across all three participants so the 
 | 0 | Case selection and setup |
 | 1 | Initial project interpretation |
 | 2 | System design and architecture backbone |
-| 3 | Data and domain modeling, Supabase connection setup, seed data, and test-data cleanup |
+| 3 | Data and domain modeling, MySQL connection setup, seed data, and test-data cleanup |
 | 4 | UI and workflow design |
 | 5 | Core feature implementation |
 | 6 | Authentication and authorization |
@@ -148,7 +147,7 @@ The comparison should focus on how each AI-use pattern performs.
 Kept the same:
 
 - Same selected case.
-- Same PERN/Supabase stack.
+- Same React/Express/Node/MySQL stack.
 - Same timebox.
 - Same checkpoints.
 - Same final change request.

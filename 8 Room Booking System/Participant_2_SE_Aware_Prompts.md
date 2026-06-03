@@ -28,30 +28,33 @@ Summarize Room Booking System: roles staff member and coordinator, main entity r
 List requirements for Room Booking System: main workflow room booking request create, view, update and approve/reject workflow, create/view/update/status actions where appropriate, roles, validation, login, protected action approve or reject room bookings and edit coordinator notes, and basic automated tests. Do not create application code yet.
 ```
 
-### Stage 2: PERN Structure
+### Stage 2: React/Express/MySQL Structure
 
 ```text
-Create PERN project structure: React frontend, Express backend, Supabase PostgreSQL, env setup, routes, pages, and run steps. Scaffold only. Do not implement the full business workflow yet.
+Create React, Express, Node.js, and MySQL project structure: React frontend, Express backend, local MySQL, env setup, routes, pages, and run steps. Scaffold only. Do not implement the full business workflow yet.
 ```
 
 ### Stage 3: Data Model
 
 ```text
-Design Supabase table for room booking using roomName, bookingDate, startTime, endTime, purpose, requesterName, status, coordinatorNote, createdAt, updatedAt, initial status values pending, approved, rejected, cancelled, required fields, and role fields.
+Design MySQL table for room booking using roomName, bookingDate, startTime, endTime, purpose, requesterName, status, coordinatorNote, createdAt, updatedAt, initial status values pending, approved, rejected, cancelled, required fields, and role fields.
 
-Use this Supabase PostgreSQL database information:
-DATABASE_URL: [SUPABASE_DATABASE_URL]
-Database password: [SUPABASE_DATABASE_PASSWORD]
+Use these local MySQL details and put them only in the backend .env file:
+DB_HOST=[MYSQL_HOST]
+DB_PORT=[MYSQL_PORT]
+DB_USER=[MYSQL_USER]
+DB_PASSWORD=[MYSQL_PASSWORD]
+DB_NAME=[MYSQL_DATABASE]
 
 Requirements:
-- Use the Express backend with pg and DATABASE_URL for database access.
-- Do not use Supabase URL/key style configuration for database queries.
+- Use the Express backend with mysql2/promise and DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for database access.
+- Do not use a single database URL or API-key style configuration for database queries.
 - Put secrets only in backend .env; never expose them in React.
 - Create a repeatable database setup script, for example npm run db:setup.
 - Create safe seed data for the workshop.
 - Create a login/users table for the two roles.
 - Do not rely on hard-coded frontend-only accounts.
-- Use clearly labelled test records in the same Supabase database and clean them up after tests.
+- Use clearly labelled test records in the same local MySQL database and clean them up after tests.
 - Do not drop existing tables unless the command is clearly named as a demo reset command.
 - Do not implement UI features in this stage.
 ```
@@ -65,7 +68,7 @@ Create UI workflow for staff member and coordinator: pages, forms, list, filters
 ### Stage 5: Main Feature
 
 ```text
-Implement room booking request create, view, update and approve/reject workflow for room booking with React pages, Express routes, Supabase queries, validation, and errors.
+Implement room booking request create, view, update and approve/reject workflow for room booking with React pages, Express routes, MySQL queries, validation, and errors.
 ```
 
 ### Stage 6: Authentication And Authorization
@@ -102,13 +105,18 @@ Case details:
 - Secondary feature: filter bookings by room, date or status
 - Protected action: approve or reject room bookings and edit coordinator notes
 
+Case-specific review focus:
+- room/date/time booking details and conflict awareness
+- booking approval/rejection status with coordinator note
+- staff ownership and coordinator-only status changes
+
 Review the project as it currently exists after the secondary feature stage and before testing, security hardening, and maintainability cleanup.
 
 Check:
 - Whether the app appears runnable.
 - Whether React frontend and Express backend are separated.
-- Whether React calls Express routes instead of Supabase directly.
-- Whether Supabase uses DATABASE_URL in the backend without exposing secrets in React.
+- Whether React calls Express routes and never connects to MySQL directly.
+- Whether the backend uses DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME for MySQL without exposing secrets in React.
 - Whether the needed database tables appear to exist, including whether a users/login table exists.
 - Whether there is a repeatable database setup or seed command.
 - Whether login is database-backed, mock-only, role-selector-only, or missing.
@@ -131,7 +139,7 @@ Score meaning:
 - 2 = partially working with major gaps
 - 3 = mostly working with important gaps
 - 4 = working with minor gaps
-- 5 = complete for workshop scope
+- 5 = complete for the selected case scope
 
 For the Mid Review, score the current raw project before testing, security hardening, maintainability cleanup, and the change request. For the Testing Evidence column, score test readiness and any test hooks that already exist. Do not create tests.
 
@@ -148,6 +156,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: room/date/time booking details and conflict awareness |  |  |  |  |  |  |  |  |  |
+| Case-specific: booking approval/rejection status with coordinator note |  |  |  |  |  |  |  |  |  |
+| Case-specific: staff ownership and coordinator-only status changes |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -171,7 +182,7 @@ Save the review in MID_REVIEW.md with:
 
 ```text
 Create automated backend tests and a test command for the main workflow, validation, login, roles, approve or reject room bookings and edit coordinator notes, and filter bookings by room, date or status.
-Use clearly labelled test records in the same Supabase database and clean them up after tests.
+Use clearly labelled test records in the same local MySQL database and clean them up after tests.
 Add manual checks only as a supplement. Include a check that direct role/owner spoofing from browser headers, request body, or query parameters is rejected.
 ```
 
@@ -200,6 +211,11 @@ Apply change request: approved room bookings must not overlap with another appro
 ```text
 Prepare a final evidence-based review for Room Booking System.
 
+Case-specific review focus:
+- room/date/time booking details and conflict awareness
+- booking approval/rejection status with coordinator note
+- staff ownership and coordinator-only status changes
+
 Instructions:
 - This is review only.
 - Do not modify application source code, database schema, seed data, package files, or configuration.
@@ -210,8 +226,8 @@ Instructions:
 - Explain the main workflow end to end.
 - List the final project structure.
 - Explain whether React and Express are separated.
-- Explain whether React calls Express, not Supabase directly.
-- Explain the database connection method. Say whether DATABASE_URL is configured, but do not print the password.
+- Explain whether React calls Express routes and never connects to MySQL directly.
+- Explain the database connection method. Say whether DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME are configured, but do not print the password.
 - List the database tables used and whether a users/login table exists.
 - Explain how tables and seed data are created again if needed.
 - Explain how test data is created and cleaned up.
@@ -246,6 +262,9 @@ Use this exact matrix structure:
 | Main update/status/cancel action |  |  |  |  |  |  |  |  |  |
 | Protected action |  |  |  |  |  |  |  |  |  |
 | Secondary feature |  |  |  |  |  |  |  |  |  |
+| Case-specific: room/date/time booking details and conflict awareness |  |  |  |  |  |  |  |  |  |
+| Case-specific: booking approval/rejection status with coordinator note |  |  |  |  |  |  |  |  |  |
+| Case-specific: staff ownership and coordinator-only status changes |  |  |  |  |  |  |  |  |  |
 | UI/manual usability |  |  |  |  |  |  |  |  |  |
 | Security posture |  |  |  |  |  |  |  |  |  |
 | Testing evidence |  |  |  |  |  |  |  |  |  |
@@ -274,12 +293,12 @@ Output:
 Use this at any stage when the AI output is incomplete, incorrect, too broad, or not aligned with the selected case.
 
 ```text
-Revise for Room Booking System. Keep PERN, small scope, staff member, coordinator, room booking, validation, backend role access, database-backed login, approve or reject room bookings and edit coordinator notes, filter bookings by room, date or status, automated checks, and fix the issue. Do only the current stage.
+Revise for Room Booking System. Keep React, Express, Node.js, and MySQL, small scope, staff member, coordinator, room booking, validation, backend role access, database-backed login, approve or reject room bookings and edit coordinator notes, filter bookings by room, date or status, automated checks, and fix the issue. Do only the current stage.
 ```
 ## Error Prompt
 
 Use this when the app fails.
 
 ```text
-Fix this PERN app error. Keep React, Express, and Supabase. Explain the cause briefly and show the changed files:
+Fix this React, Express, Node.js, and MySQL app error. Keep React, Express, Node.js, and MySQL. Explain the cause briefly and show the changed files:
 ```
