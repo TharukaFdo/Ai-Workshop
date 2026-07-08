@@ -1,0 +1,20 @@
+{
+  "name": "equipment-booking-system",
+  "version": "1.0.0",
+  "description": "Equipment Booking System for Lab Shared Resources",
+  "main": "index.js",
+  "scripts": {
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "start:backend": "npm --prefix backend run start",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:frontend": "npm --prefix frontend run dev",
+    "db:setup": "npm --prefix backend run db:setup",
+    "test": "npm --prefix backend run test",
+    "dev": "npm run install:all && npx --yes concurrently \"npm run dev:backend\" \"npm run start:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

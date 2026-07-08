@@ -1,0 +1,3 @@
+# Inventory Request System
+
+We need a simple internal system where staff can request inventory items and storekeepers can manage those requests. A staff member should be able to submit a request with item name, quantity, reason, requested date, and their name, then check whether the request is pending, approved, rejected, or issued. A storekeeper should be able to review all requests, approve or reject them, add a note, and mark approved items as issued. It would also help if requests could be filtered by item name, requester, or status. Staff should not be able to approve or issue their own requests, and they should not edit storekeeper notes. This should be a small web prototype using React, Node.js/Express, and local MySQL.

@@ -1,0 +1,30 @@
+:root {
+  --font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  --bg-color: #0f172a;
+  --panel-bg: #1e293b;
+  --border-color: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 12px;
+  --transition: all 0.2s ease-in-out;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

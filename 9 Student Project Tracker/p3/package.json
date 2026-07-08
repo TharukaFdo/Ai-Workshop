@@ -1,0 +1,15 @@
+{
+  "name": "student-project-tracker-root",
+  "version": "1.0.0",
+  "description": "Root workspace for Student Project Tracker",
+  "scripts": {
+    "install:backend": "npm install --prefix backend",
+    "install:frontend": "npm install --prefix frontend",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "db:setup": "npm run db:setup --prefix backend",
+    "db:reset": "npm run db:reset --prefix backend",
+    "test": "npm test --prefix backend"
+  }
+}
