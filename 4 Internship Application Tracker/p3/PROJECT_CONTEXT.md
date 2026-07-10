@@ -1,105 +1,94 @@
-## Case
+# Internship Application Tracker - Project Context
 
-We need a lightweight web-based Internship Application Tracker where students can submit internship applications and academic coordinators can review, comment on, and approve or reject them. It is a small prototype built with React for the frontend, Node.js/Express for the backend API, and a local MySQL database for persistence.
+## 1. Case Restatement
+The Internship Application Tracker is a web-based prototype designed to streamline the submission and review process of student internship placements. The system enables students to submit their internship details and track their status. Meanwhile, internship coordinators can review these applications, add feedback/comments, and transition the status of applications through their lifecycle. It enforces role-based permissions, ensuring students can only manage their own details and cannot self-approve applications or edit coordinator feedback.
 
-## Workshop Scope
+## 2. Workshop Scope
+The workshop scope is limited to building a functional, lightweight, local web application prototype using:
+- **Frontend**: React (Single Page Application, using vanilla CSS for rich aesthetics, and simple local routing/state).
+- **Backend**: Node.js with Express.
+- **Database**: Local MySQL database for storing applications, roles, and comments.
+- No production hosting, no third-party email systems, and no cloud-native service integrations are required.
 
-This workshop will produce a fully functional but minimal prototype that covers:
+---
 
-1. **Student application submission** — Students enter their name, company name, position title, start date, end date, and the submitted date (prefilled to today).
-2. **Application viewing** — Students can view their own applications and current status.
-3. **Coordinator review workflow** — Coordinators view all applications, add comments, and update status (submitted, under review, approved, rejected).
-4. **Filtering** — Both students and coordinators can filter applications by company name or application status.
-5. **Basic authentication** — Two role-based login modes: Student and Coordinator.
+## 3. User Roles & Responsibilities
 
-What is **included** in this session:
-- `package.json` setup for client and server
-- Express REST API with MySQL (via `mysql2`)
-- React UI with forms, list views, and filtering
-- Role-based access control (client-side plus server-side enforcement)
+### Student
+- **Submit Applications**: Can submit a new internship application containing Student Name, Company Name, Position Title, Start Date, End Date, and Submitted Date.
+- **View Status**: Can view their own submitted applications and their current status (`Submitted`, `Under Review`, `Approved`, `Rejected`, `Changes Requested`).
+- **Edit & Resubmit**: Can edit and resubmit applications *only* when their status is `Changes Requested`.
+- **Read Comments**: Can read coordinator comments on their applications.
+- **Restrictions**: Cannot approve/reject applications or create/edit coordinator comments.
 
-## Roles and Responsibilities
+### Coordinator
+- **View All Applications**: Can view a list of all submitted applications across all students.
+- **Filter Applications**: Can filter the application list by Company Name and/or Application Status.
+- **Review & Comment**: Can add or edit comments on any application.
+- **Update Status**: Can update the status of applications (`Submitted`, `Under Review`, `Approved`, `Rejected`, `Changes Requested`).
 
-| Role | Responsibilities |
-|------|-----------------|
-| **Student** | Log in, submit an internship application, view their own applications and statuses, filter by company or status. |
-| **Coordinator** | Log in, view all applications, add/edit comments, update application status, filter by company or status. |
+---
 
-**Restriction:** A student cannot approve their own applications. A student cannot edit or delete coordinator comments.
+## 4. Main Entity & Workflow
 
-## Main Entity and Workflow
+### Main Entity: `Internship Application`
+- **Fields**:
+  - `id` (INT, Primary Key, Auto-increment)
+  - `student_name` (VARCHAR, Not Null)
+  - `company_name` (VARCHAR, Not Null)
+  - `position_title` (VARCHAR, Not Null)
+  - `start_date` (DATE, Not Null)
+  - `end_date` (DATE, Not Null)
+  - `submitted_date` (TIMESTAMP, Default CURRENT_TIMESTAMP)
+  - `status` (ENUM: `'submitted'`, `'underReview'`, `'approved'`, `'rejected'`, `'changesRequested'`, Default `'submitted'`)
+  - `coordinator_comments` (TEXT, Nullable)
 
-**Entity:** `InternshipApplication`
+### Main Workflow
+```mermaid
+graph TD
+    A[Student Submits Application] -->|Status: submitted| B(Coordinator Views List)
+    B -->|Transitions status to 'underReview'| C[Coordinator Reviews Application]
+    C -->|Adds feedback/comments| D[Coordinator Updates Comments]
+    D -->|Approves or Rejects| E{Final Decision}
+    E -->|Status: approved| F[Student Views Approval & Comments]
+    E -->|Status: rejected| G[Student Views Rejection & Comments]
+    E -->|Status: changesRequested| H[Student Edits and Resubmits]
+    H -->|Status resets to 'submitted'| B
+```
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `id` | INT (PK, AUTO_INCREMENT) | |
-| `student_name` | VARCHAR(150) | |
-| `company_name` | VARCHAR(150) | |
-| `position_title` | VARCHAR(150) | |
-| `start_date` | DATE | |
-| `end_date` | DATE | |
-| `submitted_date` | DATE | Defaults to today on creation |
-| `status` | ENUM('submitted','under_review','approved','rejected') | Default: `submitted` |
-| `coordinator_comment` | TEXT | Nullable, editable only by coordinators |
-| `created_at` | DATETIME | Auto-managed |
-| `updated_at` | DATETIME | Auto-managed |
+---
 
-**Core workflow:**
+## 5. Secondary Features
+- **Filtering & Searching**: Ability to filter the applications list on the Coordinator dashboard by:
+  - Company Name (partial string match / search)
+  - Application Status (dropdown selection)
 
-1. Student logs in as a Student.
-2. Student fills in the application form and submits it (status → `submitted`).
-3. Coordinator logs in as a Coordinator.
-4. Coordinator filters/views applications, updates status, and adds comments.
-5. Student refreshes their view to see the current status and any coordinator comments.
+---
 
-## Secondary Feature
+## 6. Out of Scope
+- File/Document uploads (e.g., resumes, internship offer letters, agreement forms).
+- External accounts for company supervisors.
+- Third-party authentication integrations (e.g., OAuth, SSO, SAML).
+- Email, SMS, or in-app notification dispatch systems.
+- Advanced reporting dashboards or analytics.
 
-**Filtering** by company name (text match) and/or application status (enum) is a secondary (but required) feature. It reduces the review surface area for coordinators and helps students locate specific submissions.
+---
 
-## Out of Scope
+## 7. Assumptions
+- **Role Switching/Auth**: For the purpose of this local prototype, a simple header-based role selector (switching between "Student" and "Coordinator") or a mock login screen will be used to simulate different users.
+- **Database Connection**: The MySQL database will run locally (e.g., localhost) on standard port 3306, using basic environment variable configurations.
+- **Data Retention**: Data is persistent in the local MySQL database; no automatic purging is required.
 
-- Document uploads (resumes, cover letters, etc.)
-- Company supervisor accounts or any external approver
-- Payment processing or job postings
-- Email / notification system
-- Multi-tenant or cloud deployment
-- Unit or integration tests (prototype only)
-- Admin or user-management features (no user database — role selected at login)
+---
 
-## Assumptions
+## 8. Missing Details
+- **Multiple Applications**: Can a student submit multiple internship applications (e.g., if one gets rejected, can they submit another)? We assume yes.
+- **Student Identity**: How are students distinguished from one another if authentication is mock? We assume we can mock a student ID or select from a list of predefined mock students.
+- **Comments History**: Do we store a single comments field that gets overwritten, or a history of comments with timestamps? We assume a single, editable comments text field for the coordinator is sufficient.
 
-- There is no user database. Roles are selected via a login toggle (Student / Coordinator) without credential verification — a common prototype simplification.
-- The student name submitted is trust-based (no account lookup).
-- A single MySQL database runs locally; connection credentials are expected to be configured via environment variables.
-- All API routes are protected by a server-side middleware that checks the active role.
-- Date fields use ISO format (`YYYY-MM-DD`).
-- The application stores one application per "submission event" rather than per student (students can submit multiple applications).
-- Filtering uses a simple `LIKE` for company name and exact match for status on the server.
-- Both client and server enforce: students cannot approve/reject applications, and only coordinators can edit `coordinator_comment`.
+---
 
-## Missing Details
-
-- How does a coordinator identify *which* student submitted which application? (Currently only `student_name` text — no unique student ID.)
-- Are students allowed to edit or resubmit an application after the coordinator has already reviewed it?
-- Should there be a maximum or minimum number of applications per student?
-- What should happen when an application's end_date is in the past?
-- Should the submitted_date be auto-generated or manually entered by the student?
-- Database name and table name preferences?
-- API request/response format conventions and error code standards?
-- Deployment or run instructions for the prototype (e.g., `npm start` conventions)?
-
-## Scope Boundaries
-
-- **In scope**: React client with login toggle, application form, application list with filtering; Express REST API with CRUD + status-update + comment endpoints; MySQL schema with one `internship_applications` table; server-side role enforcement.
-- **Out of scope**: User accounts, authentication tokens, email notifications, file uploads, pagination, exports (CSV/PDF), responsive/mobile UI polish, tests, CI/CD.
-
-## Risk Notes
-
-| Risk | Mitigation |
-|------|------------|
-- MySQL may not be installed or configured on the workshop machine | Provide a `db/init.sql` script and clear step-by-step setup instructions in README; fall back to an SQLite mock if needed.
-- CORS issues between React dev server and Express | Configure Express `cors` middleware for `localhost` with explicit port allowances.
-- Students accidentally approving their own applications (if role toggle is misused) | Enforce the restriction **server-side** in the status-update endpoint; do not rely solely on client-side disabling.
-- Enum mismatch between MySQL and application code | Mirror the enum values in both the MySQL schema and the Express validation layer; validate the status string before update.
-- Prototype data persisting between workshop sessions | Ship a `db/reset.sql` script or provide a "clear all data" admin endpoint for demo purposes.
+## 9. Risk Notes
+- **Security Bypass**: Because this is a prototype, there is a risk of client-side role enforcement being bypassed. The backend Express API must validate that only coordinator users can update status and comments.
+- **MySQL Configuration**: Different local development environments might have different MySQL configurations (credentials, password policies). Clear schema initialization scripts must be provided.
+- **Date Validations**: Ensuring `start_date` is before `end_date` and handling different timezone representations between React, Express, and MySQL.

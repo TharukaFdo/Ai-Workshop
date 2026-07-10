@@ -456,3 +456,191 @@ Changes confirmed present in the final codebase that were absent at the mid-revi
 
 No features from explicitly excluded scope (file upload, supervisor accounts, email notifications) were pre-implemented.
 
+
+---
+
+## 12. Security Risks and Exposed-Secret Check
+
+| Risk | Severity | Detail | Status |
+|---|---|---|---|
+| x-user-id header is unauthenticated | Critical | Any client can send any user ID. Knowing a coordinator integer ID grants full coordinator access. | Not mitigated -- no JWT or signed session |
+| Plain-text passwords in database | Critical | auth.js compares raw strings. DB compromise reveals all credentials instantly. | Not mitigated -- no bcrypt/argon2 |
+| backend/.env likely committed (no .gitignore found) | Critical | DB credentials exposed if the project is pushed to any remote repository. | Not mitigated -- no .gitignore found |
+| CORS wide-open (app.use(cors())) | High | Any origin can make cross-origin requests to the backend. No allowlist configured. | Not mitigated |
+| SELECT * in authenticate middleware | Medium | The password column is attached to req.user on every request. | Not mitigated |
+| No helmet or security headers | Medium | No X-Content-Type-Options, Strict-Transport-Security, or Content-Security-Policy. | Not mitigated |
+| No rate limiting on login endpoint | Medium | Brute-force login attempts are not throttled. | Not mitigated |
+| schema.sql mismatch is a setup risk | Medium | A developer who runs schema.sql instead of seed.js will build a broken schema. | Not fixed -- schema.sql still stale |
+| DB_NAME mismatch between .env and .env.example | Medium | .env uses c4p1; .env.example says internship_tracker. | Not fixed |
+
+> **Secret check:** The actual value of DB_PASSWORD from backend/.env has not been read or printed in this review. Only the variable name and the fact that it is configured were confirmed.
+
+---
+
+## 13. Documentation / Code Mismatches
+
+| Document | Code | Mismatch |
+|---|---|---|
+| schema.sql ENUM: submitted, under_review, approved, rejected | seed.js ENUM: adds needs_changes | schema.sql missing needs_changes; also missing users table and student_id column |
+| .env.example DB_NAME=internship_tracker | .env DB_NAME=c4p1; seed.js default 'c4p1' | A developer copying .env.example will point to a non-existent database |
+| PUT /:id valid statuses in code include needs_changes | Case Brief only mentions: submitted, under review, approved, rejected | needs_changes is a beneficial extension not documented in Case_Brief.md |
+| No README.md | backend/package.json has 4 scripts; frontend/package.json has 4 scripts | New contributors cannot set up the project without reading source code |
+| Case Brief: students should not be able to approve their own applications | Code: students cannot approve any application (not just their own) | Code is stricter than spec -- acceptable |
+
+---
+
+## 14. Known Limitations
+
+1. **Header-spoofing vulnerability** -- x-user-id is unauthenticated. Mitigation requires JWT or signed session cookies.
+2. **Plain-text passwords** -- Acceptable only for a prototype. Any deployment must use bcrypt or argon2.
+3. **No pagination** -- GET /api/applications returns all rows. Performance degrades as the dataset grows.
+4. **No status-transition rules** -- A coordinator can set approved to submitted. Status moves in any direction.
+5. **No status-change audit log** -- No timestamp column records when a status changed or who changed it.
+6. **No debounce on company filter** -- One HTTP request per keystroke in the company search field.
+7. **Student name is free-text** -- student_name is not locked to the authenticated user's username.
+8. **needs_changes missing from coordinator filter dropdown** -- The coordinator status filter select in the UI does not include needs_changes, though the backend accepts it.
+9. **schema.sql is stale** -- Cannot be used as a standalone DB setup tool.
+10. **No .gitignore** -- node_modules and .env may be committed to version control.
+11. **Single App.jsx monolith** -- 723-line single-file React app; difficult to unit test individual components.
+12. **No frontend tests** -- All UI behaviour must be verified manually.
+13. **Test suite requires pre-seeded DB** -- npm test will fail if npm run seed has not been run first.
+14. **Wide-open CORS** -- No origin restriction on the Express server.
+15. **Demo credentials visible on login page** -- Appropriate for a prototype; must be removed before any deployment.
+
+---
+
+## 15. Demo Script
+
+Use this script to demonstrate the full end-to-end workflow in approximately 8 minutes.
+
+### Pre-demo setup (2 minutes)
+
+`ash
+# Terminal 1 -- Backend
+cd backend && npm run seed && npm run dev
+
+# Terminal 2 -- Frontend
+cd frontend && npm run dev
+`
+
+Open http://localhost:3000 in a browser.
+
+---
+
+### Scene 1 -- Student submits an application (2 minutes)
+
+1. Log in as student1 / password.
+2. Point out: only "Student Dashboard" is shown -- no coordinator controls.
+3. Fill in the form: Company = Microsoft, Position = Cloud Intern, Start = 2026-09-01, End = 2026-12-15.
+4. Click Submit Application -- note the success message and the new card appearing in "My Submissions".
+5. Point out the status badge: SUBMITTED (blue).
+6. Log out.
+
+---
+
+### Scene 2 -- Coordinator reviews and requests changes (2 minutes)
+
+1. Log in as coordinator1 / password.
+2. Point out: all four seeded applications plus the new Microsoft application are visible.
+3. Use the company filter to type "Microsoft" -- list narrows to one row.
+4. Click Review on the Microsoft row.
+5. Change status to Needs Changes, enter comment: "Please add a supervisor contact name."
+6. Click Save Review -- note the list updates and the badge changes to NEEDS CHANGES (purple).
+7. Log out.
+
+---
+
+### Scene 3 -- Student resubmits (1 minute)
+
+1. Log in as student1 / password.
+2. The Microsoft card now shows NEEDS CHANGES and the coordinator comment.
+3. Click Edit & Resubmit -- the form pre-fills with existing data.
+4. Update the Position Title to "Cloud Intern (Supervisor: Jane Lee)".
+5. Click Resubmit -- status badge returns to SUBMITTED.
+6. Log out.
+
+---
+
+### Scene 4 -- Coordinator approves (1 minute)
+
+1. Log in as coordinator1 / password.
+2. Click Review on the Microsoft row (now back to Submitted).
+3. Change status to Approved, comment: "All details confirmed. Welcome!"
+4. Click Save Review -- badge turns APPROVED (green).
+
+---
+
+### Scene 5 -- Role protection proof (30 seconds, optional)
+
+Open a terminal and run:
+`ash
+curl -X PUT http://localhost:5000/api/applications/1 -H "Content-Type: application/json" -H "x-user-id: <student1_id>" -d "{\"status\":\"approved\"}"
+`
+Response: {"error":"Forbidden. Only coordinators can review applications."} (HTTP 403)
+
+---
+
+### Scene 6 -- Run automated tests (30 seconds, optional)
+
+`ash
+cd backend && npm test
+`
+All 24 assertions pass and cleanup output is shown.
+
+---
+
+## 16. Suggested Viva Questions
+
+### Project setup and architecture
+
+1. Why are there two package.json files? What would you change to allow the project to be started with a single command from the root?
+2. The Vite config has a proxy setting pointing to localhost:5000. What problem does this solve, and what would happen in production without it?
+3. Why is schema.sql in the project if seed.js already creates the tables? What would a correct version of schema.sql contain?
+
+### Database and persistence
+
+4. What does ON DELETE CASCADE on the student_id foreign key do? Give an example of when this would trigger.
+5. Why does seed.js use DROP TABLE IF EXISTS before creating tables? Is this safe for a production database? What would you use instead?
+6. There are two different values of DB_NAME in the project. Where are they, and why is this a problem?
+
+### Login and roles
+
+7. What does the authenticate middleware do? Why does it make a database query on every single request?
+8. A student logs in and receives { id: 2, username: "student1", role: "student" }. How does the backend verify that subsequent requests actually come from student1?
+9. What is header spoofing in this context? How would you fix it?
+
+### Protected actions
+
+10. Walk through exactly what happens when student1 tries to call PUT /api/applications/1 with status approved. Which line of code rejects it, and what HTTP status code does it return?
+11. Why does the resubmit route check existing[0].student_id !== req.user.id? What attack does this prevent?
+12. What happens if a coordinator calls PUT /api/applications/1 with coordinator_comments: null? Is this the desired behaviour?
+
+### Validation
+
+13. The backend checks end_date < start_date. Why is this check still present in the frontend too? Which one is the true security boundary and why?
+14. What would happen if you removed the status allowlist check in the PUT route? Could an attacker inject arbitrary data into the status column?
+15. Why does the backend validate field length (> 255) even though the MySQL column is VARCHAR(255)?
+
+### Testing
+
+16. test.js does not use Jest or Mocha -- it uses raw fetch and a custom assert() function. What are the trade-offs of this approach compared to a proper test framework?
+17. The test deletes the created application in a finally block. Why finally rather than at the end of the try block?
+18. npm test starts a server on port 5001. Why not reuse port 5000? What would happen if you did?
+19. Name two important scenarios that the current test suite does not cover. How would you add them?
+
+### Security
+
+20. The project uses app.use(cors()) with no options. What does this allow? How would you restrict it to allow only http://localhost:3000?
+21. SELECT * is used in the authenticate middleware. What column does this unnecessarily load into memory on every request?
+22. Passwords are stored and compared as plain text. Without showing the actual password, explain how you would migrate to hashed passwords using bcrypt.
+
+### Case-specific
+
+23. The Case Brief says "students should not be able to approve their own applications." Does the current code enforce this only for their own applications, or for all applications? Is that stronger or weaker than what was specified?
+24. How does the system know which applications belong to which student? Trace the field from the database to the API response to the UI card.
+25. A coordinator sets status to needs_changes. What must happen before the student can resubmit? List every check the backend performs on the resubmit route.
+
+---
+
+*End of Final Review -- Internship Application Tracker (p1)*
+*Reviewed: 2026-07-08 | Files inspected: 13 | Lines read: ~1,800 | Assertions verified: 24*
