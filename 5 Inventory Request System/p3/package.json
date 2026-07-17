@@ -1,0 +1,16 @@
+{
+  "name": "inventory-request-system",
+  "version": "1.0.0",
+  "description": "Inventory Request System Prototype",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "start:frontend": "npm run dev --prefix frontend",
+    "db:setup": "npm run db:setup --prefix backend",
+    "dev": "npx concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "test": "npm test --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

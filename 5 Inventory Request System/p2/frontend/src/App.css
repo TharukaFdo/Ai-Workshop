@@ -1,0 +1,6 @@
+/* Basic style resets */
+body {
+  margin: 0;
+  background-color: #fafafa;
+  color: #333;
+}
